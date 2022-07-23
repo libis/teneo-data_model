@@ -8,15 +8,13 @@ module Teneo::DataModel
 
     ROLE_LIST = %w'uploader ingester admin'
 
-    one_to_many :user
-    one_to_many :organization
+    many_to_one :user
+    many_to_one :organization
 
     def validate
       super
       validates_includes ROLE_LIST, :role
-      query = self.class.where(user: user, organization: organization, role: role)
-      query = query.where.not(id: id) if id # exclude self if persisted
-      errors.add(:role, 'should be unique for a given user and organization') unless query.size == 0
+      validates_unique [:user_id, :organization_id, :role]
     end
 
   end

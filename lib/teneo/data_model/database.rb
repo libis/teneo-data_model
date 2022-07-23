@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'singleton'
-
 require 'dotenv'
 Dotenv.load('.env.local', '.env')
+
+require 'singleton'
 
 module Teneo::DataModel
 
