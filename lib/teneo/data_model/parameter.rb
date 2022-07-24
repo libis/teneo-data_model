@@ -51,6 +51,14 @@ module Teneo::DataModel
       self.my_descriptions.first
     end
 
+    def reference(param)
+      targets << param
+    end
+
+    def dereference(target)
+      self.references.where(target: target).destroy
+    end
+
     def mapped(to_obj = nil)
       if to_obj
         sources_dataset.where(with_parameters_id: to_obj.id, with_parameters_type: to_obj.class.name).count == 1
@@ -66,5 +74,8 @@ module Teneo::DataModel
     def value
       default.nil? ? targets.map { |d| d.value }.compact.first : default
     end
+
+    def to_hash(recursive = false)
+      
   end
 end
