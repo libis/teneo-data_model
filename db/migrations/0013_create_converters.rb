@@ -4,7 +4,7 @@ Sequel.migration do
 
   change do
 
-    create_table :representation_infos do
+    create_table :converters do
 
       String :category, null: false, default: 'converter'
       String :name, null: false
