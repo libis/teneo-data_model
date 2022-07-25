@@ -9,10 +9,12 @@ module Teneo::DataModel
     plugin :json_serializer, except: %i'id created_at updated_at lock_version'
 
     one_to_many :memberships, remover: lambda { |m| m.destroy }
-    add_association_dependencies memberships: :destroy
+    one_to_many :storages
+    add_association_dependencies memberships: :destroy, storages: :destroy
 
     many_to_many :users, join_table: :memberships, distinct: true
     many_to_many :user_roles, class: Teneo::DataModel::User, join_table: :memberships, right_key: :user_id, select: [Sequel[:users].*,Sequel[:memberships][:role]]
+
 
     def validate
       super
