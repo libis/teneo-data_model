@@ -6,6 +6,8 @@ Sequel.migration do
 
     create_table :converters do
 
+      primary_key :id
+
       String :category, null: false, default: 'converter'
       String :name, null: false
       String :class_name, null: false
@@ -15,8 +17,6 @@ Sequel.migration do
       column :output_formats, 'string[]' 
   
       Integer :lock_version, null: false, default: 0
-
-      primary_key [:ext_id], name: 'representation_infos_pk'
 
     end
 
