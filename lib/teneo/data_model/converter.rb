@@ -2,6 +2,7 @@
 
 module Teneo::DataModel
   class Converter < Teneo::DataModel::Base
+    include WithParameters
 
     CATEGORY_LIST = %w'selecter converter assembler splitter'
 
