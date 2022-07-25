@@ -59,6 +59,10 @@ module Teneo::DataModel
       self.references.where(target: target).destroy
     end
 
+    def reference_name
+      "#{with_parameters.name rescue "#{with_parameters_type}.name"}##{name}"
+    end
+
     def mapped(to_obj = nil)
       if to_obj
         sources_dataset.where(with_parameters_id: to_obj.id, with_parameters_type: to_obj.class.name).count == 1
@@ -75,7 +79,34 @@ module Teneo::DataModel
       default.nil? ? targets.map { |d| d.value }.compact.first : default
     end
 
+    # Get a Hash with the parameter data
+    # The effect of the recursive parameter:
+    #  - false (default) : only the information for the parameters of the current item is exported
+    #  - not false : missing parameters information (e.g. data type) will be collected from referenced parameters
+    #  - :collapse : deeply nested references will be added to the :references array with their reference name
+    #  - :tree : child parameter references will be added to the :targets array as a recursive hash
+    # @param [FalseClass, Symbol] recursive option that will be passed to Parameter#to_hash
     def to_hash(recursive = false)
-      
+      super().tap do |h|
+        h[:with_parameters] = [[self.with_parameters_type, self.with_parameters_id]]
+        h[:export] ||= false
+        h[:references] = targets.map(&:reference_name)
+        if recursive
+          targets.each do |target|
+            target_hash = target.to_hash(recursive)
+            (h[:targets] ||= []) << target_hash if recursive == :tree
+            h[:references] += target_hash[:references] if recursive == :collapse
+            h = target_hash.merge(h)
+          end
+        end
+      end
+    end
+
+    protected
+
+    def volatile_attributes
+      super + %i'with_parameters_id with_parameters_type'
+    end
+
   end
 end
