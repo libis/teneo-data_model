@@ -49,7 +49,7 @@ module Teneo::DataModel
       @host = ENV.fetch('DB_HOST', 'localhost')
       @port = ENV.fetch('DB_PORT', 5432).to_i
       @max_connections = ENV.fetch('DB_MAX_CONNECTIONS', 10).to_i
-      @extensions = [:async_thread_pool]
+      @extensions = [:async_thread_pool, :pg_array]
     end
 
   end
