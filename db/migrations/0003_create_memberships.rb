@@ -4,6 +4,8 @@ Sequel.migration do
 
   change do
 
+    puts 'Creating memberships table ...'
+
     create_table :memberships do
 
       foreign_key :user_id, :users, null: false
@@ -11,7 +13,7 @@ Sequel.migration do
 
       String :role, null: false
 
-      primary_key [:user_id, :organization_id, :role], name: 'memberships_pk'
+      primary_key [:user_id, :organization_id, :role]
 
       Integer :lock_version, null: false, default: 0
 

@@ -6,6 +6,8 @@ module Teneo::DataModel
 
     plugin :json_serializer, include: {user: {only: :email}, organization: {only: :name}}
 
+    unrestrict_primary_key
+
     ROLE_LIST = %w'uploader ingester admin'
 
     many_to_one :user

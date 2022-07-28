@@ -37,8 +37,15 @@ module Teneo
     autoload :Parameter, 'teneo/data_model/parameter'
     autoload :ParameterReference, 'teneo/data_model/parameter_reference'
     autoload :StorageType, 'teneo/data_model/storage_type'
+    # autoload :Storage, 'teneo/data_model/storage'
+    # autoload :MaterialFlow, 'teneo/data_model/material_flow'
+    # autoload :Producer, 'teneo/data_model/producer'
+    # autoload :RetentionPolicy, 'teneo/data_model/retention_policy'
+    # autoload :AccessRight, 'teneo/data_model/access_right'
+    # autoload :RepresentationInfo, 'teneo/data_model/representation_info'
+    # autoload :Converter, 'teneo/data_model/converter'
 
-    autoload :WithParameters, 'teneo/data_model/concerns/with_parameters'
+    autoload :WithParameters, 'teneo/data_model/with_parameters'
 
   end
 end

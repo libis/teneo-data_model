@@ -36,9 +36,10 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "dotenv"
   spec.add_runtime_dependency "dry-configurable"
+  spec.add_runtime_dependency "method_source"
   spec.add_runtime_dependency "sequel_secure_password"
-  spec.add_runtime_dependency "sequel_polymorphic"
+  spec.add_runtime_dependency "sequel-seed"
 
-  # For more information and examples about making a new gem, check out our
-  # guide at: https://bundler.io/guides/creating_gem.html
+  spec.add_runtime_dependency "teneo-extensions"
+  spec.add_runtime_dependency "teneo-storage_driver"
 end

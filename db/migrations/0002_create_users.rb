@@ -4,6 +4,8 @@ Sequel.migration do
 
   change do
 
+    puts 'Creating users table ...'
+    
     create_table :users do
 
       primary_key :id
@@ -13,6 +15,8 @@ Sequel.migration do
       
       String :first_name
       String :last_name
+
+      String :encrypted_password
   
       boolean :admin, null: false, default: false
         

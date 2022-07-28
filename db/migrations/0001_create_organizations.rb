@@ -4,6 +4,8 @@ Sequel.migration do
 
   change do
 
+    puts 'Creating organizations table ...'
+
     create_table :organizations do
 
       primary_key :id

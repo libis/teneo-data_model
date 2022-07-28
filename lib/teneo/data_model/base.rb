@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require 'sequel'
+
+require_relative 'database'
+
 module Teneo::DataModel
   Base = Class.new(Sequel::Model(Teneo::DataModel::Database.connect))
   Base.require_valid_table = false
@@ -7,8 +11,11 @@ module Teneo::DataModel
   Base.def_Model(Teneo::DataModel)
 
   class Base
+
+    plugin :association_dependencies
+    
     def to_hash
-      super().reject { |k, v| volatile_attributes.include?(k) }
+      super().reject { |k, v| v.nil? || volatile_attributes.include?(k) }
     end
 
     protected

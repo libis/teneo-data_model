@@ -2,19 +2,38 @@
 
 Sequel.migration do
 
-  change do
+  up do
+
+    puts 'Creating storage_types table ...'
 
     create_table :storage_types do
+
+      primary_key :id
 
       String :protocol, null: false, index: { unique: true }
       String :driver_class
       String :description
 
-      primary_key [:protocol]
-  
       Integer :lock_version, null: false, default: 0
   
     end
+
+    alter_table :parameters do
+      add_foreign_key :storage_type_id, :storage_types
+      add_index [:storage_type_id, :name], name: :parameters_id_name_idx, unique: true
+
+    end
+
+  end
+
+  down do
+
+    alter_table :parameters do
+      drop_index :parameters_id_name_idx
+      drop_foreign_key :storage_type_id
+    end
+
+    drop_table :storage_types
 
   end
 

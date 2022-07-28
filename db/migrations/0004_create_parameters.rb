@@ -4,6 +4,8 @@ Sequel.migration do
 
   change do
 
+    puts 'Creating parameters table ...'
+
     create_table :parameters do
 
       primary_key :id
@@ -15,13 +17,9 @@ Sequel.migration do
       String :default
       String :description
       String :help, text: true
-      
-      String :with_parameters_type, null: false
-      Bignum :with_parameters_id, null: false
 
       Integer :lock_version, null: false, default: 0
 
-      index [:with_parameters_type, :with_parameters_id, :name], name: :parameters_with_parameters_name, unique: true
 
     end
 

@@ -49,6 +49,14 @@ module Teneo::DataModel
     end
 
     def add_role(organization, role)
+      case organization
+      when Teneo::DataModel::Organization
+        # OK
+      when String
+        organization = Teneo::DataModel::Organization.find(name: organization)
+      else
+        return nil
+      end
       self.add_membership(organization: organization, role: role)
     rescue Sequel::ValidationFailed
       return nil

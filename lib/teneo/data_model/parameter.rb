@@ -1,29 +1,24 @@
 # frozen_string_literal: true
 
+require "teneo/extensions"
+
 module Teneo::DataModel
   class Parameter < Teneo::DataModel::Base
-    DATA_TYPE_LIST = %w'string integer float bool hash array array_string array_integer array_float array_bool'
+    DATA_TYPE_LIST = %w'String Integer Float Boolean Hash Array Array_string Array_integer Array_float Array_bool'
 
-    many_to_one :with_parameters, polymorphic: true
+    many_to_many :ancestors, class: Teneo::DataModel::Parameter, join_table: :parameter_references,
+                             left_key: :child_id, right_key: :parent_id,
+                             order: [:parent_id, :child_id]
+    many_to_many :descendants, class: Teneo::DataModel::Parameter, join_table: :parameter_references,
+                               left_key: :parent_id, right_key: :child_id,
+                               order: [:parent_id, :child_id]
 
-    one_to_many :references, class: Teneo::DataModel::ParameterReference, key: :source_id,
-                             order: [:with_parameters_type, :with_parameters_id, :name]
-    one_to_many :referenced, class: Teneo::DataModel::ParameterReference, key: :target_id,
-                             order: [:with_parameters_type, :with_parameters_id, :name]
+    add_association_dependencies ancestors: :nullify, descendants: :nullify
 
-    add_association_dependencies references: :destroy, referenced: :destroy
-
-    many_to_many :sources, class: Teneo::DataModel::Parameter, join_table: :parameter_references,
-                           left_key: :source_id, right_key: :target_id,
-                           order: [:with_parameters_type, :with_parameters_id, :name]
-    many_to_many :targets, class: Teneo::DataModel::Parameter, join_table: :parameter_references,
-                           left_key: :target_id, right_key: :source_id,
-                           order: [:with_parameters_type, :with_parameters_id, :name]
+    many_to_one :storage_type
 
     def validate
       validates_presence :name
-      validates_presence :with_parameters_id
-      validates_presence :with_parameters_type
       validates_includes DATA_TYPE_LIST, :data_type
     end
 
@@ -52,23 +47,39 @@ module Teneo::DataModel
     end
 
     def reference(param)
-      targets << param
+      sources << param
     end
 
-    def dereference(target)
-      self.references.where(target: target).destroy
+    def dereference(param)
+      remove_source(param)
+    end
+
+    def host
+      storage_type || nil
+    end
+
+    def host_name
+      host&.name
+    end
+
+    def host_type
+      host&.class&.name
+    end
+
+    def host_id
+      host&.id
     end
 
     def reference_name
-      "#{with_parameters.name rescue "#{with_parameters_type}.name"}##{name}"
+      "#{host_name}##{name}"
+    end
+
+    def reference_hash
+      { type: host_type, id: host_id, name: name }
     end
 
     def mapped(to_obj = nil)
-      if to_obj
-        sources_dataset.where(with_parameters_id: to_obj.id, with_parameters_type: to_obj.class.name).count == 1
-      else
-        !(sources_dataset.count == 0)
-      end
+      host ? host == to_obj : false
     end
 
     def unmapped(to_obj = nil)
@@ -76,7 +87,7 @@ module Teneo::DataModel
     end
 
     def value
-      default.nil? ? targets.map { |d| d.value }.compact.first : default
+      default.nil? ? ancestors.map { |d| d.value }.compact.first : default
     end
 
     # Get a Hash with the parameter data
@@ -88,15 +99,16 @@ module Teneo::DataModel
     # @param [FalseClass, Symbol] recursive option that will be passed to Parameter#to_hash
     def to_hash(recursive = false)
       super().tap do |h|
-        h[:with_parameters] = [[self.with_parameters_type, self.with_parameters_id]]
+        h[:host_type] = self.host_type
+        h[:host_id] = self.host_id
         h[:export] ||= false
-        h[:references] = targets.map(&:reference_name)
-        if recursive
-          targets.each do |target|
-            target_hash = target.to_hash(recursive)
-            (h[:targets] ||= []) << target_hash if recursive == :tree
-            h[:references] += target_hash[:references] if recursive == :collapse
-            h = target_hash.merge(h)
+        h[:references] = ancestors.map(&:reference_hash)
+        if (recursive)
+          ancestors.each do |parent|
+            parent_hash = parent.to_hash(recursive)
+            h.apply_defaults!(parent_hash.slice(:data_type, :contraint, :default, :description, :help))
+            (h[:parents] ||= []) << parent_hash if recursive == :tree
+            h[:references] += parent_hash[:references] if recursive == :collapse
           end
         end
       end
@@ -107,6 +119,5 @@ module Teneo::DataModel
     def volatile_attributes
       super + %i'with_parameters_id with_parameters_type'
     end
-
   end
 end
