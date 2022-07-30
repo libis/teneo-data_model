@@ -29,7 +29,7 @@ Sequel.migration do
   down do
 
     alter_table :parameters do
-      drop_index :parameters_id_name_idx
+      drop_index [:storage_type_id, :name], name: :parameters_id_name_idx
       drop_foreign_key :storage_type_id
     end
 

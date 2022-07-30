@@ -31,11 +31,16 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.add_runtime_dependency "net-ftp"
+  
   spec.add_runtime_dependency "sequel", "~> 5.58"
   spec.add_runtime_dependency "pg"
+  spec.add_runtime_dependency "sequel_pg"
 
   spec.add_runtime_dependency "dotenv"
   spec.add_runtime_dependency "dry-configurable"
+  spec.add_runtime_dependency "dry-types"
+  spec.add_runtime_dependency "dry-struct"
   spec.add_runtime_dependency "method_source"
   spec.add_runtime_dependency "sequel_secure_password"
   spec.add_runtime_dependency "sequel-seed"

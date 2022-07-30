@@ -10,6 +10,8 @@ module Teneo::DataModel
 
     include WithParameters
 
+    one_to_many :storages
+
     PROTOCOL_LIST = Teneo::StorageDriver::Base.protocols
 
     def validate
@@ -19,6 +21,10 @@ module Teneo::DataModel
 
     def name
       self.protocol
+    end
+
+    def parameter_child_hosts
+      [storages]
     end
 
   end

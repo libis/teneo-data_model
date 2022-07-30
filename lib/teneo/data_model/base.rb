@@ -18,6 +18,10 @@ module Teneo::DataModel
       super().reject { |k, v| v.nil? || volatile_attributes.include?(k) }
     end
 
+    def stringify
+      "#{self.class.name}[#{self.pk}]"
+    end
+
     protected
 
     def volatile_attributes

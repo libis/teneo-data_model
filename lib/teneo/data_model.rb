@@ -3,7 +3,6 @@
 require_relative "data_model/version"
 
 require 'sequel'
-require 'sequel/plugins/polymorphic'
 require 'json'
 
 require 'dry/configurable'
@@ -14,7 +13,6 @@ Sequel::Model.plugin :optimistic_locking
 Sequel::Model.plugin :association_dependencies
 Sequel::Model.plugin :dataset_associations
 Sequel::Model.plugin :delay_add_association
-Sequel::Model.plugin :polymorphic
 
 module Teneo
   module DataModel
@@ -37,7 +35,7 @@ module Teneo
     autoload :Parameter, 'teneo/data_model/parameter'
     autoload :ParameterReference, 'teneo/data_model/parameter_reference'
     autoload :StorageType, 'teneo/data_model/storage_type'
-    # autoload :Storage, 'teneo/data_model/storage'
+    autoload :Storage, 'teneo/data_model/storage'
     # autoload :MaterialFlow, 'teneo/data_model/material_flow'
     # autoload :Producer, 'teneo/data_model/producer'
     # autoload :RetentionPolicy, 'teneo/data_model/retention_policy'

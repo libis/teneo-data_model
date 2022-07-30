@@ -4,6 +4,12 @@ require_relative "parameter"
 
 module Teneo::DataModel
   module WithParameters
+
+    def add_linked_parameter(parameter, **opts)
+      param = self.add_parameter(opts)
+      param.add_ancestor(parameter)
+    end
+
     def parameter_values(**opts)
       parameters.each_with_object({}) do |param, result|
         next unless !ops.key?(:export) || param.export == !opts[:export]
@@ -15,6 +21,10 @@ module Teneo::DataModel
     # To be overwritten by the class that includes this module
     # @return [Array]
     def parameter_parent_hosts
+      []
+    end
+
+    def parameter_child_hosts
       []
     end
 
@@ -45,7 +55,40 @@ module Teneo::DataModel
       end
     end
 
+    def parameters_for(host, via_hosts = [])
+      path = host_path(host, via_hosts)
+      puts "WARNING: multiple paths found for #{host.stringify} via #{via_hosts.map { |host| "#{host.stringify}" }}, only considering the first one" if path.size > 1
+      raise ArgumentError, "No path found for #{host.stringify} via #{via_hosts.map { |host| "#{host.stringify}" }}" if path.empty?
+      path = path.first
+      host.parameters.map do |param|
+        param.derived_hash(path.dup)
+      end.each_with_object({}) do |param_hash, hash|
+        hash[param_hash[:name]] = param_hash[:default]
+      end
+    end
+
     protected
+
+    def host_path(to_host, waypoints = [])
+      # add the current host to the list
+      waypoints << self
+      waypoints.uniq!
+      # get hold to all the ancestor paths
+      anc_paths = ancestor_host_paths(to_host)
+      # find those paths that include all of the waypoints
+      anc_paths.uniq.select { |path| (path & waypoints).size == waypoints.size }
+    end
+
+    def ancestor_host_paths(to_host)
+      return [[self]] if self == to_host
+      return [[self, to_host]] if parameter_parent_hosts.include?(to_host)
+      parameter_parent_hosts.map(&:ancestor_host_paths.(to_host)).compact.reduce([]) { |r, i| r + i.unshift(self) }
+    end
+
+    def descendant_host_paths
+      return [[self]] if parameter_child_hosts.empty?
+      parameter_child_hosts.map(&:descendant_host_paths).compact.reduce([]) { |r, i| r + push(self) }
+    end
 
     def parent_parameters(**opts)
       parameter_parent_hosts.map do |hosts|

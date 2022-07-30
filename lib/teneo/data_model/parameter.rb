@@ -2,9 +2,12 @@
 
 require "teneo/extensions"
 
+require "dry-types"
+require "dry-struct"
+
 module Teneo::DataModel
   class Parameter < Teneo::DataModel::Base
-    DATA_TYPE_LIST = %w'String Integer Float Boolean Hash Array Array_string Array_integer Array_float Array_bool'
+    DATA_TYPE_LIST = %w'String Integer Float Boolean Hash Array Array_string Array_integer Array_float Array_bool' + [nil]
 
     many_to_many :ancestors, class: Teneo::DataModel::Parameter, join_table: :parameter_references,
                              left_key: :child_id, right_key: :parent_id,
@@ -16,6 +19,7 @@ module Teneo::DataModel
     add_association_dependencies ancestors: :nullify, descendants: :nullify
 
     many_to_one :storage_type
+    many_to_one :storage
 
     def validate
       validates_presence :name
@@ -47,15 +51,15 @@ module Teneo::DataModel
     end
 
     def reference(param)
-      sources << param
+      ancestors << param
     end
 
     def dereference(param)
-      remove_source(param)
+      remove_ancestor(param)
     end
 
     def host
-      storage_type || nil
+      storage_type || storage || nil
     end
 
     def host_name
@@ -87,11 +91,29 @@ module Teneo::DataModel
     end
 
     def value
+      cast(get_value)
+    end
+
+    def get_value
       default.nil? ? ancestors.map { |d| d.value }.compact.first : default
     end
 
+    def derived_hash(host_path)
+      derived_param = most_derived(host_path)
+      derived_param.to_hash(:collapse)
+    end
+
+    def most_derived(host_path)
+      return self unless export
+      target_host = host_path.pop
+      target_host = host_path.pop if target_host == self.host
+      found = descendants.select { |a| a.host == target_host }
+      return self if found.empty?
+      found.first.most_derived(host_path)
+    end
+
     # Get a Hash with the parameter data
-    # The effect of the recursive parameter:
+    # The effect of the recursiveParijs parameter:
     #  - false (default) : only the information for the parameters of the current item is exported
     #  - not false : missing parameters information (e.g. data type) will be collected from referenced parameters
     #  - :collapse : deeply nested references will be added to the :references array with their reference name
@@ -114,10 +136,55 @@ module Teneo::DataModel
       end
     end
 
+    def data_hash
+      to_hash(false).slice(:name, :export, :data_type, :constraint, :default, :description, :help)
+    end
+
     protected
 
     def volatile_attributes
       super + %i'with_parameters_id with_parameters_type'
+    end
+
+    module Types
+      include Dry.Types()
+      StringCaster = Types::Coercible::String.optional
+      IntegerCaster = Types::Params::Integer.optional
+      FloatCaster = Types::Params::Float.optional
+      BooleanCaster = Types::Params::Bool.optional
+      HashCaster = Types::Params::Hash.optional
+      ArrayCaster = Types::Params::Array.optional
+      ArrayStringCaster = Types::Array.of(Types::Coercible::String.optional)
+      ArrayIntegerCaster = Types::Array.of(Types::Params::Integer.optional)
+      ArrayFloatCaster = Types::Array.of(Types::Params::Float.optional)
+      ArrayBooleanCaster = Types::Array.of(Types::Params::Bool.optional)
+    end
+
+    def cast
+      case self.data_type.downcase
+      when "string"
+        Types::StringCaster[self.value]
+      when "integer"
+        Types::IntegerCaster[self.value]
+      when "float"
+        Types::FloatCaster[self.value]
+      when "boolean"
+        Types::BooleanCaster[self.value]
+      when "hash"
+        Types::HashCaster[self.value]
+      when "array"
+        Types::ArrayCaster[self.value]
+      when "array_string"
+        Types::ArrayStringCaster[Types::ArrayCaster[self.value]]
+      when "array_integer"
+        Types::ArrayIntegerCaster[Types::ArrayCaster[self.value]]
+      when "array_float"
+        Types::ArrayFloatCaster[Types::ArrayCaster[self.value]]
+      when "array_bool"
+        Types::ArrayBooleanCaster[Types::ArrayCaster[self.value]]
+      else
+        raise ArgumentError, "Parameter does not understand data type '#{data_type}'"
+      end
     end
   end
 end
