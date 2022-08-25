@@ -16,7 +16,6 @@ module Teneo::DataModel
     def validate
       super
       validates_includes ROLE_LIST, :role
-      validates_unique [:user_id, :organization_id, :role]
     end
 
   end

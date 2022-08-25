@@ -4,6 +4,9 @@ require_relative "parameter"
 
 module Teneo::DataModel
   module WithParameters
+    def get_parameter(**opts)
+      parameters_dataset.find(**opts).first
+    end
 
     def add_linked_parameter(parameter, **opts)
       param = self.add_parameter(opts)
@@ -12,7 +15,7 @@ module Teneo::DataModel
 
     def parameter_values(**opts)
       parameters.each_with_object({}) do |param, result|
-        next unless !ops.key?(:export) || param.export == !opts[:export]
+        next unless !opts.key?(:export) || param.export == !opts[:export]
         result[param.name] = param.default
       end
     end
@@ -91,13 +94,11 @@ module Teneo::DataModel
     end
 
     def parent_parameters(**opts)
-      parameter_parent_hosts.map do |hosts|
-        hosts.map do |host|
-          host.parameters
-            .reject { |p| opts.key?(:export) && p.export == !opts[:export] }
-            .reject { |p| opts.key?(:mapped) && p.mapped == !opts[:mapped] }
-          +(opts[:recursive] ? host.parent_parameters(**opts) : [])
-        end
+      parameter_parent_hosts.map do |host|
+        plist = host.parameters
+        plist.reject! { |p| opts.key?(:export) && p.export == !opts[:export] }
+        plist.reject! { |p| opts.key?(:mapped) && p.mapped(self) == !opts[:mapped] }
+        plist += opts[:recursive] ? host.parent_parameters(**opts) : []
       end.flatten
     end
   end

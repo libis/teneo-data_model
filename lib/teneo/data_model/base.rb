@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'sequel'
+require 'yaml'
 
 require_relative 'database'
 
@@ -16,6 +17,26 @@ module Teneo::DataModel
     
     def to_hash
       super().reject { |k, v| v.nil? || volatile_attributes.include?(k) }
+    end
+
+    def self.from_hash(**opts)
+      self.create(**opts)
+    end
+
+    def self.from_yaml(file)
+      data = YAML.load(File.read(file), symbolize_names: true)
+      self.from_data(data)
+    end
+
+    def self.from_data(data)
+      case data
+      when Hash
+        self.from_hash(**data)
+      when Array
+        data.each {|d| self.from_data(d)}
+      else
+        raise RuntimeError, "Invalid data format (#{data.class.name}): #{data.inspect}"
+      end
     end
 
     def stringify

@@ -1,0 +1,20 @@
+- name: 'kadoc'
+  description: 'KADOC organization'
+  inst_code: 'KADOC'
+  depot_url: 'https://repository.teneo.libis.be'
+  storages:
+    uploads:
+      purpose: 'upload'
+      protocol: 'NFS'
+      parameters:
+        location: '/nas/vol04/upload/kadoc'
+- name: 'kadoc_test'
+  description: 'KADOC organization on TEST'
+  inst_code: 'KADOC'
+  depot_url: 'https://sandbox.teneo.libis.be'
+  storages:
+    uploads:
+      purpose: 'upload'
+      protocol: 'NFS'
+      parameters:
+        location: '/nas/vol04/upload/kadoc'

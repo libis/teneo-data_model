@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Teneo::DataModel
-
   class User < Teneo::DataModel::Base
-
     plugin :json_serializer, except: %i'id created_at updated_at lock_version encrypted_password'
     plugin :secure_password, digest_column: :encrypted_password
 
@@ -11,14 +9,13 @@ module Teneo::DataModel
     add_association_dependencies memberships: :destroy
 
     many_to_many :organizations, join_table: :memberships, distinct: true
-    many_to_many :organization_roles, class: Teneo::DataModel::Organization, join_table: :memberships, right_key: :organization_id, select: [Sequel[:organizations].*,Sequel[:memberships][:role]]
+    many_to_many :organization_roles, class: Teneo::DataModel::Organization, join_table: :memberships, right_key: :organization_id, select: [Sequel[:organizations].*, Sequel[:memberships][:role]]
 
     def validate
       super
       self.email = self.email.to_s.downcase
       validates_presence [:email, :first_name, :last_name]
-      validates_unique :email
-      validates_format URI::MailTo::EMAIL_REGEXP, :email, message: 'is not a valid email address'
+      validates_format URI::MailTo::EMAIL_REGEXP, :email, message: "is not a valid email address"
     end
 
     def name
@@ -52,12 +49,12 @@ module Teneo::DataModel
       case organization
       when Teneo::DataModel::Organization
         # OK
-      when String
-        organization = Teneo::DataModel::Organization.find(name: organization)
+      when String, Symbol
+        organization = Teneo::DataModel::Organization.find(name: organization.to_s)
       else
         return nil
       end
-      self.add_membership(organization: organization, role: role)
+      self.add_membership(organization: organization, role: role.to_s)
     rescue Sequel::ValidationFailed
       return nil
     end
@@ -70,14 +67,17 @@ module Teneo::DataModel
     end
 
     def member_organizations
-
       self.organization_roles
         .map(&:to_hash)
         .group_by { |h| h.except(:role) }
         .transform_values { |a| a.map { |h| h[:role] } }
-
     end
 
+    def self.from_hash(**opts)
+      memberships = opts.delete(:memberships) || {}
+      user = Teneo::DataModel::User.create(**opts, password_confirmation: opts[:password])
+      memberships.each { |org, roles| [roles].flatten.each { |role| user.add_role(org, role) } }
+      user
+    end
   end
-
 end

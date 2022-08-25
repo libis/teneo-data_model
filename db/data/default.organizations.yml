@@ -1,0 +1,4 @@
+- name: 'teneo'
+  description: 'LIBIS Teneo'
+  inst_code: 'CSR00'
+  depot_url: 'https://repository.teneo.libis.be'

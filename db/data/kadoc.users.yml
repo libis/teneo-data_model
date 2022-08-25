@@ -1,0 +1,11 @@
+- email: 'info@kadoc.be'
+  first_name: 'KADOC'
+  last_name: 'Ingester'
+  password: '123abc'
+  memberships:
+    kadoc:
+    - 'uploader'
+    - 'ingester'
+    kadoc_test:
+    - 'uploader'
+    - 'ingester'

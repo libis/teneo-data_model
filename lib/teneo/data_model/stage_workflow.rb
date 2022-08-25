@@ -7,6 +7,7 @@ module Teneo::DataModel
     STAGE_LIST = Teneo::DataModel::IngestStage::STAGE_LIST
 
     def validate
+      super
       validates_presence :stage, :name
       validates_includes STAGE_LIST, :stage
     end

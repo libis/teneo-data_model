@@ -1,13 +1,10 @@
 # frozen_string_literal: true
 
 Sequel.migration do
-
   change do
-
-    puts 'Creating parameters table ...'
+    puts "Creating parameters table ..."
 
     create_table :parameters do
-
       primary_key :id
 
       String :name, null: false
@@ -19,10 +16,6 @@ Sequel.migration do
       String :help, text: true
 
       Integer :lock_version, null: false, default: 0
-
-
     end
-
   end
-
 end

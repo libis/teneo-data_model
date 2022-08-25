@@ -17,6 +17,16 @@ module Teneo::DataModel
       instance.connect
     end
 
+    def self.reconnect(**opts)
+      instance.config(**opts)
+      instance.reconnect
+    end
+
+    def reconnect
+      @db = nil
+      connect
+    end
+
     def connect
       @db ||= Sequel.connect(
         adapter: @adapter,
@@ -27,31 +37,31 @@ module Teneo::DataModel
         database: @database,
         max_connections: @max_connections,
         extensions: @extensions,
-      )
-      @db.stream_all_queries = true
-      @db
+      ) do |database|
+        database.stream_all_queries = true
+        if ENV["LOGGING"]&.downcase == "debug"
+          database.sql_log_level = :debug
+          database.loggers << Logger.new($stdout)
+        end
+        database
+      end
     end
 
-    def self.reconnect
-      instance.reconnect
-    end
-
-    def reconnect
-      @db = nil
-      connect
+    def config(**opts)
+      @adapter = opts[:adapter] || ENV.fetch("DB_ADAPTER", :postgres).to_sym
+      @user = opts[:user] || ENV.fetch("DB_USER", "teneo")
+      @password = opts[:password] || ENV.fetch("DB_PASSWORD", "teneo")
+      @database = opts[:database] || ENV.fetch("DB_NAME", "teneo")
+      @host = opts[:host] || ENV.fetch("DB_HOST", "localhost")
+      @port = opts[:port] || ENV.fetch("DB_PORT", 5432).to_i
+      @max_connections = opts[:max_connections] || ENV.fetch("DB_MAX_CONNECTIONS", 10).to_i
+      @extensions = [:async_thread_pool, :pg_array, :pg_streaming]
     end
 
     private
 
     def initialize
-      @adapter = ENV.fetch("DB_ADAPTER", :postgres).to_sym
-      @user = ENV.fetch("DB_USER", "teneo")
-      @password = ENV.fetch("DB_PASSWORD", "teneo")
-      @database = ENV.fetch("DB_NAME", "teneo")
-      @host = ENV.fetch("DB_HOST", "localhost")
-      @port = ENV.fetch("DB_PORT", 5432).to_i
-      @max_connections = ENV.fetch("DB_MAX_CONNECTIONS", 10).to_i
-      @extensions = [:async_thread_pool, :pg_array, :pg_streaming]
+      config
     end
   end
 end

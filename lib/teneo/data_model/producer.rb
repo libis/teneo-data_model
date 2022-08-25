@@ -9,8 +9,8 @@ module Teneo::DataModel
     end
 
     def validate
-      validates_presence :name, :ext_id, :inst_code, :agent, :password
-      validates_unique [:inst_code, :name]
+      super
+      validates_presence [:name, :ext_id, :inst_code, :agent, :password]
     end
   end
 end

@@ -1,0 +1,13 @@
+- email: 'admin@libis.be'
+  first_name: 'Libis'
+  last_name: 'Administrator'
+  admin: true
+  password: 'abc123'
+  memberships:
+    teneo: 'admin'
+- email: 'teneo.libis@gmail.com'
+  first_name: 'Ingest'
+  last_name: 'Operator'
+  password: '123abc'
+  memberships:
+    teneo: 'ingester'

@@ -22,6 +22,7 @@ module Teneo::DataModel
     many_to_one :storage
 
     def validate
+      super
       validates_presence :name
       validates_includes DATA_TYPE_LIST, :data_type
     end
@@ -83,7 +84,7 @@ module Teneo::DataModel
     end
 
     def mapped(to_obj = nil)
-      host ? host == to_obj : false
+      to_obj.nil? ? descendants.size > 0 : descendants.any? { |p| p.host == to_obj }
     end
 
     def unmapped(to_obj = nil)
