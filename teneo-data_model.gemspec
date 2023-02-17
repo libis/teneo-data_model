@@ -6,15 +6,15 @@ Gem::Specification.new do |spec|
   spec.name = "teneo-data_model"
   spec.version = Teneo::DataModel::VERSION
   spec.authors = ["Kris Dekeyser"]
-  spec.email = ["kris.dekeyser@libis.be"]
+  spec.email = ["kris.dekeyser@kuleuven.be"]
 
   spec.summary = "Data Model classes for Teneo"
   spec.description = "This gem provides a library with all the Data Model classes for Teneo"
   spec.homepage = "https://github.com/LIBIS/teneo-data_model"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 2.6.0"
+  spec.required_ruby_version = ">= 3.0.0"
 
-  spec.metadata["allowed_push_host"] = "https://rubygems.org"
+  spec.metadata["allowed_push_host"] = "https://rubygems.pkg.github.com/libis"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/LIBIS/teneo-data_model"
@@ -45,6 +45,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "sequel_secure_password"
   spec.add_runtime_dependency "sequel-seed"
 
-  spec.add_runtime_dependency "teneo-extensions"
+  spec.add_runtime_dependency "teneo-tools"
   spec.add_runtime_dependency "teneo-storage_driver"
 end
