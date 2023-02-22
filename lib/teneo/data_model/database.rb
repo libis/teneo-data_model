@@ -23,6 +23,7 @@ module Teneo::DataModel
     end
 
     def reconnect
+      disconnect
       @db = nil
       connect
     end
@@ -56,6 +57,11 @@ module Teneo::DataModel
       @port = opts[:port] || ENV.fetch("DB_PORT", 5432).to_i
       @max_connections = opts[:max_connections] || ENV.fetch("DB_MAX_CONNECTIONS", 10).to_i
       @extensions = [:async_thread_pool, :pg_array, :pg_streaming]
+    end
+
+    def disconnect
+      return unless @db.is_a?(Sequel::Database) && @db.valid_connection?
+      @db.disconnect
     end
 
     private
