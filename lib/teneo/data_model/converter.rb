@@ -8,9 +8,9 @@ module Teneo::DataModel
 
     def validate
       super
-      validates_presence [:name, :preservation_type, :usage_type]
-      validates_includes PRESERVATION_TYPES, :preservation_type
-      validates_includes USAGE_TYPES, :usage_type
+      validates_presence [:category, :name, :class_name]
+      validates_includes CATEGORY_LIST, :category
+      validates_format SAFE_NAME, :name, message: "contains illegal characters"
     end
 
     def self.from_hash(**opts)
