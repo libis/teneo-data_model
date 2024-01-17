@@ -2,13 +2,13 @@
 
 Sequel.migration do
   change do
-    puts "Creating parameters table ..."
+    puts 'Creating parameters table ...'
 
     create_table :parameters do
       primary_key :id
 
       String :name, null: false
-      boolean :export, null: false, default: true
+      TrueClass :export, null: false, default: true
       String :data_type
       String :constraint
       String :default

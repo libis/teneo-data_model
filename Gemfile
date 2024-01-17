@@ -1,14 +1,18 @@
 # frozen_string_literal: true
 
-source "https://rubygems.org"
+source 'https://rubygems.org'
+
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Specify your gem's dependencies in teneo-data_model.gemspec
 gemspec
 
-gem "rake", "~> 13.0"
+group :development do
+  gem 'rubocop', '~> 1.60'
+  gem 'ruby-lsp', '~> 0.13'
+end
 
-gem "rspec", "~> 3.0"
+gem 'rake', '~> 13.0'
+gem 'rspec', '~> 3.0'
 
-gem "awesome_print"
-gem "rubocop"
-gem "standardrb"
+gem 'awesome_print'

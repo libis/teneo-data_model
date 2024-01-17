@@ -2,7 +2,7 @@
 
 Sequel.migration do
   change do
-    puts "Creating parameter_references table ..."
+    puts 'Creating parameter_references table ...'
 
     create_table :parameter_references do
       foreign_key :parent_id, :parameters, on_delete: :restrict, on_update: :restrict
@@ -10,7 +10,7 @@ Sequel.migration do
 
       Integer :lock_version, null: false, default: 0
 
-      index [:parent_id, :child_id], name: :parameters_source_target_idx, unique: true
+      index %i[parent_id child_id], name: :parameters_parent_child_idx, unique: true
     end
   end
 end

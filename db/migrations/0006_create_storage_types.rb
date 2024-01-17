@@ -2,7 +2,7 @@
 
 Sequel.migration do
   up do
-    puts "Creating storage_types table ..."
+    puts 'Creating storage_types table ...'
 
     create_table :storage_types do
       primary_key :id
@@ -16,13 +16,13 @@ Sequel.migration do
 
     alter_table :parameters do
       add_foreign_key :storage_type_id, :storage_types, on_delete: :cascade, on_update: :restrict
-      add_index [:storage_type_id, :name], name: :parameters_id_name_idx, unique: true
+      add_index %i[storage_type_id name], name: :parameters_id_name_idx, unique: true
     end
   end
 
   down do
     alter_table :parameters do
-      drop_index [:storage_type_id, :name], name: :parameters_id_name_idx
+      drop_index %i[storage_type_id name], name: :parameters_id_name_idx
       drop_foreign_key :storage_type_id
     end
 
