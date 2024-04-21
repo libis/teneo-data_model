@@ -3,7 +3,7 @@
 Sequel.migration do
   change do
     create_table :memberships do
-      foreign_key :user_id, :users, null: false, on_delete: :cascade, unique: :cascade
+      foreign_key :user_id, :users, null: false, on_delete: :cascade, on_update: :cascade
       foreign_key :organization_id, :organizations, null: false, on_delete: :cascade, on_update: :cascade
 
       String :role, null: false

@@ -9,7 +9,6 @@ Sequel.migration do
       String :inst_code, null: false
 
       String :description
-      String :depot_url
 
       Integer :lock_version, null: false, default: 0
     end
@@ -20,6 +19,7 @@ Sequel.migration do
 
       String :inst_code, null: false
       String :ingest_dir, null: false
+      String :depot_url, null: false
 
       index %i[repository_id inst_code], unique: true
     end

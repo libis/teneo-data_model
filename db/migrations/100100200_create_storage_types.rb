@@ -17,12 +17,14 @@ Sequel.migration do
       foreign_key :storage_type_id, :storage_types, on_delete: :cascade, on_update: :cascade
 
       String :name, null: false
-      TrueClass :export, null: false, default: true
+      String :description
+      String :help, text: true
+
       String :data_type
       String :constraint
       String :default
-      String :description
-      String :help, text: true
+
+      FalseClass :frozen, null: false, default: false
 
       index %i[storage_type_id name], unique: true
 

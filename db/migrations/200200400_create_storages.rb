@@ -21,25 +21,25 @@ Sequel.migration do
       foreign_key :storage_id, :storages, on_delete: :cascade, on_update: :cascade
 
       String :name, null: false
-      TrueClass :export, null: false, default: true
+      String :description
+      String :help, text: true
+
       String :data_type
       String :constraint
       String :default
-      String :description
-      String :help, text: true
+
+      FalseClass :frozen, null: false, default: false
 
       index %i[storage_type_id name], unique: true
 
       Integer :lock_version, null: false, default: 0
     end
 
-    change do
-      create_table :storage_storage_type_paramrefs do
-        foreign_key :from_param_id, :storage_parameters, null: false, on_delete: :cascade, on_update: :cascade
-        foreign_key :to_param_id, :storage_type_parameters, null: false, on_delete: :restrict, on_update: :cascade
+    create_table :storage_storage_type_paramrefs do
+      foreign_key :from_param_id, :storage_parameters, null: false, on_delete: :cascade, on_update: :cascade
+      foreign_key :to_param_id, :storage_type_parameters, null: false, on_delete: :restrict, on_update: :cascade
 
-        Integer :lock_version, null: false, default: 0
-      end
+      Integer :lock_version, null: false, default: 0
     end
   end
 end

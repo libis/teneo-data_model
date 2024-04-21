@@ -18,12 +18,14 @@ Sequel.migration do
       foreign_key :ingest_stage_id, :ingest_stages, on_delete: :cascade, on_update: :cascade
 
       String :name, null: false
-      TrueClass :export, null: false, default: true
+      String :description
+      String :help, text: true
+
       String :data_type
       String :constraint
       String :default
-      String :description
-      String :help, text: true
+
+      FalseClass :frozen, null: false, default: false
 
       index %i[ingest_stage_id name], unique: true
 

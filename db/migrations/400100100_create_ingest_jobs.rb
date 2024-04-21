@@ -19,12 +19,14 @@ Sequel.migration do
       foreign_key :ingest_job_id, :ingest_jobs, on_delete: :cascade, on_update: :restrict
 
       String :name, null: false
-      TrueClass :export, null: false, default: true
+      String :description
+      String :help, text: true
+
       String :data_type
       String :constraint
       String :default
-      String :description
-      String :help, text: true
+
+      FalseClass :frozen, null: false, default: false
 
       index %i[ingest_job_id name], unique: true
 

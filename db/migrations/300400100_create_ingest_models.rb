@@ -27,12 +27,14 @@ Sequel.migration do
       foreign_key :ingest_model_id, :ingest_models, on_delete: :cascade, on_update: :cascade
 
       String :name, null: false
-      TrueClass :export, null: false, default: true
+      String :description
+      String :help, text: true
+
       String :data_type
       String :constraint
       String :default
-      String :description
-      String :help, text: true
+
+      FalseClass :frozen, null: false, default: false
 
       index %i[ingest_model_id name], unique: true
 
