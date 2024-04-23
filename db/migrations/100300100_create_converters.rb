@@ -20,6 +20,7 @@ Sequel.migration do
 
     create_table :converter_parameters do
       primary_key :id
+
       foreign_key :converter_id, :converters, on_delete: :cascade, on_update: :cascade
 
       String :name, null: false
@@ -32,9 +33,9 @@ Sequel.migration do
 
       FalseClass :frozen, null: false, default: false
 
-      index %i[converter_id name], unique: true
-
       Integer :lock_version, null: false, default: 0
+
+      index %i[converter_id name], unique: true
     end
   end
 end

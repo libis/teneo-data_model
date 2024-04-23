@@ -6,8 +6,8 @@ Sequel.migration do
       primary_key :id
 
       String :name, null: false, index: { unique: true }
-      String :category, null: false
-      String :group, null: false
+      String :category
+      String :group
       String :description
 
       column :mimetypes, 'text[]', null: false, index: { type: :gin }

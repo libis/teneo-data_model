@@ -7,9 +7,7 @@ Sequel.migration do
 
       String :inst_code, null: false
       String :name, null: false
-      String :ext_id, null: false, index: { unique: true }
       String :description
-      String :ingest_dir, null: false
       String :ingest_type, null: false
 
       Integer :lock_version, null: false, default: 0
@@ -21,7 +19,10 @@ Sequel.migration do
       foreign_key :material_flow_id, :material_flows, null: false, on_delete: :cascade, on_update: :cascade
       foreign_key :repository_id, :repositories, null: false, on_delete: :restrict, on_update: :restrict
 
-      String :code, null: false, index: { unique: true }
+      String :code, null: false
+      String :ingest_dir, null: false
+
+      index %i[material_flow_id repository_id], unique: true
     end
   end
 end

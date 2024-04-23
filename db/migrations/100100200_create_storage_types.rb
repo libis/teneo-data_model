@@ -14,6 +14,7 @@ Sequel.migration do
 
     create_table :storage_type_parameters do
       primary_key :id
+
       foreign_key :storage_type_id, :storage_types, on_delete: :cascade, on_update: :cascade
 
       String :name, null: false
@@ -26,9 +27,9 @@ Sequel.migration do
 
       FalseClass :frozen, null: false, default: false
 
-      index %i[storage_type_id name], unique: true
-
       Integer :lock_version, null: false, default: 0
+
+      index %i[storage_type_id name], unique: true
     end
   end
 end

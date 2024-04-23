@@ -13,7 +13,7 @@ Sequel.migration do
       DateTime :created_at, null: false, default: Sequel::CURRENT_TIMESTAMP
       DateTime :updated_at, null: false, default: Sequel::CURRENT_TIMESTAMP
 
-      foreign_key :package_id, :packages, null: false, on_delete: :cascade, on_update: :restrict
+      foreign_key :package_id, :packages, null: false, on_delete: :cascade, on_update: :cascade
       foreign_key :item_id, :items, null: true, on_delete: :set_null, on_update: :cascade
 
       index %i[package_id created_at]

@@ -16,6 +16,8 @@ Sequel.migration do
       foreign_key :repository_id, :repositories, null: false, on_delete: :restrict, on_update: :restrict
 
       String :code, null: false, index: { unique: true }
+
+      index %i[access_right_id repository_id], unique: true
     end
   end
 end

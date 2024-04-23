@@ -23,7 +23,7 @@ Sequel.migration do
       String :agent, null: false
       String :password, null: false
 
-      index %i[repository_id code], unique: true
+      index %i[producer_id repository_id], unique: true
     end
   end
 end

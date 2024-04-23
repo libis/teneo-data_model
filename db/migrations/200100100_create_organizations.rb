@@ -6,8 +6,6 @@ Sequel.migration do
       primary_key :id
 
       String :name, null: false, index: { unique: true }
-      String :inst_code, null: false
-
       String :description
 
       Integer :lock_version, null: false, default: 0
@@ -21,7 +19,7 @@ Sequel.migration do
       String :ingest_dir, null: false
       String :depot_url, null: false
 
-      index %i[repository_id inst_code], unique: true
+      index %i[organization_id repository_id], unique: true
     end
   end
 end

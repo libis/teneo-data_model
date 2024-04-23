@@ -8,9 +8,9 @@ Sequel.migration do
 
       String :role, null: false
 
-      primary_key %i[user_id organization_id role]
-
       Integer :lock_version, null: false, default: 0
+
+      index %i[user_id organization_id role], unique: true
     end
   end
 end

@@ -14,10 +14,14 @@ Sequel.migration do
       column :contact_system, 'text[]', index: { type: :gin }
       String :collection_description
 
+      foreign_key :organization_id, null: false
+
       foreign_key :producer_id, :producers, null: false
       foreign_key :material_flow_id, :material_flows, null: false
 
       Integer :lock_version, null: false, default: 0
+
+      index %i[organization_id name], unique: true
     end
   end
 end

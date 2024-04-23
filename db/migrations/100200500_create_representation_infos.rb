@@ -12,6 +12,8 @@ Sequel.migration do
       String :representation_code
 
       Integer :lock_version, null: false, default: 0
+
+      index %i[preservation_type usage_type representation_code], unique: true
     end
   end
 end
