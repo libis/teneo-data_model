@@ -4,9 +4,9 @@ require 'fileutils'
 
 module Teneo
   module DataModel
-    class Organization < Teneo::DataModel::Base
-      one_to_many :memberships, remover: ->(m) { m.destroy }
-      one_to_many :storages
+    class Repository < Teneo::DataModel::Base
+      many_to_many :organizations, join_table: :organization_codes
+
       add_association_dependencies memberships: :destroy, storages: :destroy
 
       many_to_many :users, join_table: :memberships, distinct: true

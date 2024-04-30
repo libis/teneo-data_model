@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "data_model/version"
+require_relative 'data_model/version'
 
 require 'sequel'
 require 'json'
@@ -16,7 +16,6 @@ Sequel::Model.plugin :delay_add_association
 
 module Teneo
   module DataModel
-
     SAFE_NAME = /\A[0-9a-zA-Z_]+\z/
 
     include Dry::Configurable
@@ -27,9 +26,11 @@ module Teneo
     class Error < StandardError; end
 
     autoload :Database, 'teneo/data_model/database'
-    
+
     autoload :Base, 'teneo/data_model/base'
+    autoload :Repository, 'teneo/data_mode/repository'
     autoload :Organization, 'teneo/data_model/organization'
+    autoload :OrganizationCode, 'teneo/data_model/organization_code'
     autoload :User, 'teneo/data_model/user'
     autoload :Membership, 'teneo/data_model/membership'
     autoload :Parameter, 'teneo/data_model/parameter'
@@ -45,6 +46,5 @@ module Teneo
     # autoload :Converter, 'teneo/data_model/converter'
 
     autoload :WithParameters, 'teneo/data_model/with_parameters'
-
   end
 end
