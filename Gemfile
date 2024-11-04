@@ -8,7 +8,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 gemspec
 
 group :development do
-  gem 'rubocop', '~> 1.60'
+  gem 'rubocop', '~> 1.66', '>= 1.66.0'
   gem 'ruby-lsp', '~> 0.13'
 end
 
