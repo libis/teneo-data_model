@@ -14,6 +14,9 @@ Sequel.migration do
       String :classification
       String :md_extractor
 
+      DateTime :created_at, null: false
+      DateTime :updated_at, null: false
+
       Integer :lock_version, null: false, default: 0
     end
   end
