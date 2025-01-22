@@ -1,19 +1,14 @@
 # frozen_string_literal: true
 
 require 'dotenv'
-Dotenv.load('.env.local', '.env')
-
-require 'bundler/gem_tasks'
-require 'rspec/core/rake_task'
-
-RSpec::Core::RakeTask.new(:spec)
-
-task default: :spec
+Dotenv.load('../.env.local', '../.env')
 
 require 'sequel'
 require 'logger'
 
-require_relative 'lib/teneo/data_model/database'
+$LOAD_PATH.unshift File.expand_path('..', 'gem/lib')
+
+require 'teneo/data_model'
 
 def db_connect(database: nil)
   puts 'Connecting to database ...'

@@ -7,7 +7,6 @@ require_relative 'database'
 
 module Teneo
   module DataModel
-
     # Base class for all models
     #
     # This class is used as a base class for all models.
@@ -15,7 +14,7 @@ module Teneo
     # Class Methods:
     # - volatile_attributes: Returns an array of attribute names that are considered volatile
     #    (i.e., not important for data export).
-    # - load_json, load_hash, from_yaml, and from_data: These methods load data from different formats 
+    # - load_json, load_hash, from_yaml, and from_data: These methods load data from different formats
     #    (JSON, hash, YAML, and generic data) into the model. They delegate to from_hash or from_json methods,
     #    which are defined by the json_serializer plugin.
     # - from_data: Recursively loads data from a hash or array into the model.
@@ -37,6 +36,7 @@ module Teneo
     class Base
       plugin :association_dependencies
       plugin :json_serializer
+      plugin :update_or_create
 
       # Validates that the repository name is safe and doesn't contain any illegal characters.
       def validate

@@ -1,21 +1,17 @@
 # frozen_string_literal: true
 
-module Teneo::DataModel
-  class Format < Teneo::DataModel::Base
-    CATEGORY_LIST = %w'ARCHIVE AUDIO EMAIL IMAGE PRESENTATION TABULAR TEXT VIDEO OTHER'
-
-    def validate
-      validates_presence [:name, :category, :mimetypes, :extensions]
-      validates_includes CATEGORY_LIST, :category
-    end
-
-    def self.all_tags
-      result = []
-      CATEGORY_LIST.each do |category|
-        result << category
-        result += self.where(category: category).pluck(:name)
+module Teneo
+  module DataModel
+    class Format < Teneo::DataModel::Base
+      one_to_many :tags, class: Teneo::DataModel::FormatTag, key: :format
+      
+      def validate
+        validates_presence %i[puid name]
       end
-      result
+
+      def tag_tree
+        self.format_tags.map(&:tag_tree).flatten
+      end
     end
   end
 end
