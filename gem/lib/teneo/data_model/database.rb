@@ -99,7 +99,7 @@ module Teneo
         @host = opts[:host] || ENV.fetch('DB_HOST', 'localhost')
         @port = opts[:port] || ENV.fetch('DB_PORT', 5432).to_i
         @max_connections = opts[:max_connections] || ENV.fetch('DB_MAX_CONNECTIONS', 10).to_i
-        @extensions = %i[async_thread_pool pg_array pg_json pg_jsonb pg_streaming]
+        @extensions = %i[async_thread_pool pg_array pg_json pg_streaming]
       end
 
       # Disconnects from the current database connection if it is valid.

@@ -6,7 +6,7 @@ Dotenv.load('../.env.local', '../.env')
 require 'sequel'
 require 'logger'
 
-$LOAD_PATH.unshift File.expand_path('..', 'gem/lib')
+$LOAD_PATH.unshift 'lib'
 
 require 'teneo/data_model'
 

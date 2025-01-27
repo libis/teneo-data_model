@@ -6,17 +6,16 @@ export
 SHELL = /bin/bash
 
 define help-targets
-        awk -F ':|## ' '/^[^\t]+\s*:[^#]*## / {printf "    \033[36m%-30s\033[0m %s\n", $$1, $$NF}' $(1)
+	awk -F ':|## ' '/^[^\t]+\s*:[^#]*## / {printf "    \033[36m%-30s\033[0m %s\n", $$1, $$NF}' $(1)
 endef
 
 define help-admins
-        awk -F ':|### ' '/^[^\t]+\s*:[^#]*### / {printf "  * \033[36m%-30s\033[0m %s\n", $$1, $$NF}' $(1)
+	awk -F ':|### ' '/^[^\t]+\s*:[^#]*### / {printf "  * \033[36m%-30s\033[0m %s\n", $$1, $$NF}' $(1)
 endef
 
 define HELPTEXT
 
 usage: help <command>
-                
 endef
 
 define ADMINTEXT
@@ -28,11 +27,18 @@ Note: Administrative tasks are indicated with an '*' in front of them. These tas
 endef
 
 help: ## Show list and info on common tasks
-        @echo "$$HELPTEXT"
-        $(call help-targets, $(MAKEFILE_LIST))
-        $(call help-admins, $(MAKEFILE_LIST))
-        @echo "$$ADMINTEXT"
+	@echo "$$HELPTEXT"
+	$(call help-targets, $(MAKEFILE_LIST))
+	$(call help-admins, $(MAKEFILE_LIST))
+	@echo "$$ADMINTEXT"
 
+.PHONY: bundle_install
+bundle_install: ## Install gem dependencies
+	cd gem && bundle install
+
+.PHONY: db_recreate
+db_recreate: ## Recreate the database
+	cd gem && rake db:recreate
 
 .PHONY: all
 all: build
