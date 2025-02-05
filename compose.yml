@@ -1,24 +1,95 @@
+name: ingester
+
 services:
   db:
-    image: postgres:16-alpine
+    image: postgres:17-alpine
     user: "1000:1000"
-    hostname: ${DB_HOST}
     command: ["postgres", "-c", "log_hostname=off"]
     init: true
     shm_size: 128mb
+    env_file:
+      - .env
+      - path: .env.local
+        required: false
     environment:
-      LC_ALL: C.UTF-8
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
       PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - db_net
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
-    restart: always
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+
+  db_admin:
+    image: dpage/pgadmin4
+    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
+    networks:
+      - db_net
+      - app_net
+    ports:
+      - "7004:5050"
+    environment:
+      TZ: "Europe/Brussels"
+      PGADMIN_DEFAULT_EMAIL: ${DBADMIN_USER:-admin}
+      PGADMIN_DEFAULT_PASSWORD: ${DBADMIN_PWD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: "True"
+      PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: "True"
+      PGADMIN_CONFIG_LOG_FILE: "'/var/lib/pgadmin/pgadmin4.log'"
+      PGADMIN_LISTEN_ADDRESS: "0.0.0.0"
+      PGADMIN_LISTEN_PORT: "5050"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - db_admin_data:/var/lib/pgadmin
+      - db_admin_logs:/var/log/pgadmin
+    depends_on:
+      - db
+    restart: unless-stopped
+
+
+  db_migrations:
+    image: ${RUBY_IMAGE}:${RUBY_VERSION}
+    user: "1000:1000"
+    command: ["bundle", "exec", "rake", "db:migrate"]
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+      - path: .env.local
+        required: false
+    environment:
+      POSTGRES_USER: ${DB_USER}
+    networks:
+      - app_net
+    volumes:
+      - ./gem:/app
+    restart: no
+
+
 
 volumes:
   db_data:
     driver: local
+  db_admin_data:
+    driver: local
+  db_admin_logs:
+    driver: local
     
+networks:
+  app_net:
+    driver: bridge
+    attachable: true
+
+  db_net:
+    driver: bridge
+    attachable: true
