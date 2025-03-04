@@ -35,14 +35,9 @@ module Teneo
 
     class Base
       plugin :association_dependencies
+      plugin :csv_serializer
       plugin :json_serializer
       plugin :update_or_create
-
-      # Validates that the repository name is safe and doesn't contain any illegal characters.
-      def validate
-        super
-        validates_format Teneo::DataModel::SAFE_NAME, :name, message: 'contains illegal characters'
-      end
 
       # Class methods
       class << self
@@ -54,50 +49,46 @@ module Teneo
           %i[id created_at updated_at lock_version]
         end
 
-        # Loads data from a JSON string and returns an instance of the model.
-        #
-        # @param data [String] The JSON string containing the data to load.
-        # @param opts [Hash] Additional options passed to the from_json method.
-        # @return [Object] An instance of the model populated with the data from the JSON string.
-        def load_json(data, **opts)
-          from_json(data, **opts)
-        end
-
-        # Loads data from a hash and returns an instance of the model.
-        #
-        # @param data [Hash] The hash containing the data to load.
-        # @param opts [Array] Additional options passed to the from_hash method.
-        # @return [Object] An instance of the model populated with the data from the hash.
-        def load_hash(data, *opts)
-          from_hash(data, **opts)
-        end
-
-        # Loads data from a YAML file and returns an instance of the model.
-        #
-        # @param file [String] The path to the YAML file containing the data to load.
-        # @return [Object] An instance of the model populated with the data from the YAML file.
-        def from_yaml(file)
-          data = YAML.load(File.read(file), symbolize_names: true)
-          from_data(data)
-        end
-
-        # Recursively loads data from a hash or array into the model.
-        #
-        # When the data is a hash, it delegates to the from_hash method.
-        # When the data is an array, it iterates over the array and calls
-        # this method recursively.
-        #
-        # @param data [Hash, Array] The hash or array containing the data to load.
-        # @raise [RuntimeError] When the data is in an invalid format.
-        def from_data(data)
-          case data
-          when Hash
-            from_hash(**data)
-          when Array
-            data.each { |d| from_data(d) }
-          else
-            raise "Invalid data format (#{data.class.name}): #{data.inspect}"
+        def from_yaml_file(file:, key: nil)
+          YAML.load_file(file).then do |data|
+            [data].flatten.map { |d| from_hash(data: d, key: key) }
           end
+        end
+
+        def from_csv_file(file:, key: nil, **opts, &block)
+          CSV.read(file, **opts[:csv_opts]).then do |data|
+            opts[:header_filter]&.call(data)
+            data.map { |d| from_hash(data: d.to_hash, key: key, &block) }
+          end
+        end
+
+        def from_json_file(file:, key: nil)
+          from_json(data: File.read(file), key: key)
+        end
+
+        def from_json(data:, key: nil)
+          data = JSON.parse(data)
+          from_hash(data: data, key: key)
+        end
+
+        def from_hash(data:, key: nil, &block)
+          data = data.transform_keys(&:to_sym)
+          key = key&.to_sym || primary_key
+          if key == primary_key
+            update_or_create_by_pk(data:, &block)
+          else
+            data.delete(primary_key)
+            update_or_create(data.slice(key), data, &block)
+          end
+        end
+
+        def update_or_create_by_pk(data:, &block)
+          key = data.delete(primary_key)
+          obj = find(primary_key => key) || new
+          obj.send("#{primary_key}=", key)
+          block.call(obj) if block_given?
+          obj.update(data)
+          obj
         end
       end
 
@@ -105,16 +96,16 @@ module Teneo
       #
       # @param opts [Hash] Additional options passed to the to_json method.
       # @return [String] A JSON string representation of the model.
-      def export_json(**opts)
-        to_json(except: self.class.volatile_attributes, **opts)
+      def to_json(**opts)
+        super(except: self.class.volatile_attributes, **opts)
       end
 
       # Returns a hash representation of the model, excluding volatile attributes.
       #
       # @param opts [Hash] Additional options passed to the to_hash method.
       # @return [Hash] A hash representation of the model.
-      def export_hash(**opts)
-        to_hash(except: self.class.volatile_attributes, **opts)
+      def to_hash(**opts)
+        super(except: self.class.volatile_attributes, **opts)
       end
 
       protected

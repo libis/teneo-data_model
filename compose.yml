@@ -1,16 +1,12 @@
-name: ingester
+name: teneo
 
 services:
   db:
     image: postgres:17-alpine
-    user: "1000:1000"
+    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
     command: ["postgres", "-c", "log_hostname=off"]
     init: true
     shm_size: 128mb
-    env_file:
-      - .env
-      - path: .env.local
-        required: false
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -21,18 +17,23 @@ services:
     ports:
       - "${DB_PORT}:5432"
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - db_data:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 30s
-      timeout: 60s
-      retries: 5
-      start_period: 80s
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 10s
+      retries: 20
+      start_period: 5s
+    labels:
+      - be.libis.service=teneo
+      - be.libis.environment=production
+      - be.libis.instance=ingester
+      - be.libis.component=db
 
   db_admin:
     image: dpage/pgadmin4
-    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
     networks:
       - db_net
       - app_net
@@ -40,7 +41,7 @@ services:
       - "7004:5050"
     environment:
       TZ: "Europe/Brussels"
-      PGADMIN_DEFAULT_EMAIL: ${DBADMIN_USER:-admin}
+      PGADMIN_DEFAULT_EMAIL: ${DBADMIN_USER:-admin@libis.be}
       PGADMIN_DEFAULT_PASSWORD: ${DBADMIN_PWD:-admin}
       PGADMIN_CONFIG_SERVER_MODE: "True"
       PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: "True"
@@ -52,44 +53,89 @@ services:
       - db_admin_data:/var/lib/pgadmin
       - db_admin_logs:/var/log/pgadmin
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+        restart: true
     restart: unless-stopped
+    labels:
+      - be.libis.service=teneo
+      - be.libis.environment=production
+      - be.libis.instance=ingester
+      - be.libis.component=db_admin
 
 
-  db_migrations:
+  db_tool:
     image: ${RUBY_IMAGE}:${RUBY_VERSION}
-    user: "1000:1000"
-    command: ["bundle", "exec", "rake", "db:migrate"]
+    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
+    working_dir: /app
+    command: ["rake", "db:migrate"]
     depends_on:
       db:
         condition: service_healthy
+        restart: true
     env_file:
       - .env
       - path: .env.local
         required: false
     environment:
-      POSTGRES_USER: ${DB_USER}
+      BUNDLE_COMMAND: install
+      GEMS_PATH: /app/vendor/bundle
+      BUNDLE_PATH: /app/vendor/bundle
     networks:
-      - app_net
+      - db_net
     volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
       - ./gem:/app
     restart: no
-
-
+    profiles:
+      - db_tool
+    labels:
+      - be.libis.be.service=teneo
+      - be.libis.be.environment=production
+      - be.libis.be.instance=ingester
+      - be.libis.be.component=db_tool
 
 volumes:
   db_data:
     driver: local
+    labels:
+      - be.libis.be.service=teneo
+      - be.libis.be.environment=production
+      - be.libis.be.instance=ingester
+      - be.libis.be.component=db
+
   db_admin_data:
     driver: local
+    labels:
+      - be.libis.be.service=teneo
+      - be.libis.be.environment=production
+      - be.libis.be.instance=ingester
+      - be.libis.be.component=db_admin
+
   db_admin_logs:
     driver: local
+    labels:
+      - be.libis.be.service=teneo
+      - be.libis.be.environment=production
+      - be.libis.be.instance=ingester
+      - be.libis.be.component=db_admin
     
 networks:
   app_net:
     driver: bridge
     attachable: true
+    labels:
+      - be.libis.be.service=teneo
+      - be.libis.be.environment=production
+      - be.libis.be.instance=ingester
+      - be.libis.be.component=app
 
   db_net:
     driver: bridge
     attachable: true
+    labels:
+      - be.libis.be.service=teneo
+      - be.libis.be.environment=production
+      - be.libis.be.instance=ingester
+      - be.libis.be.component=network

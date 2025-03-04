@@ -3,9 +3,13 @@
 require 'teneo/data_model/repository'
 
 Sequel.seed(:production, :development, :test) do
-  puts 'Creating default repositories ...'
-
   def run
-    Teneo::DataModel::Repository.from_yaml(File.join(File.dirname(__FILE__), '..', 'data', 'default.repositories.yml'))
+    puts 'Creating default repositories ...'
+
+    basedir = File.join(File.dirname(__FILE__), '..', 'data', 'repositories')
+    Dir.glob('*.json', base: basedir).each do |file|
+      puts "... #{file}"
+      Teneo::DataModel::Repository.from_json_file(file: File.join(basedir, file), key: :name)
+    end
   end
 end

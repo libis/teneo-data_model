@@ -74,6 +74,10 @@ module Teneo
         end
       end
 
+      def self.config(**opts)
+        instance.config(**opts)
+      end
+
       # Configures the database connection settings with the provided options.
       #
       # The options available are:
@@ -91,6 +95,8 @@ module Teneo
       #     Defaults to environment variable "DB_PORT" or 5432.
       # - max_connections: The maximum number of connections to allow in the connection pool.
       #     Defaults to environment variable "DB_MAX_CONNECTIONS" or 10.
+      # - extensions: An array of extensions to enable for the database connection.
+      #     Alswys loaded are :async_thread_pool, :pg_array, :pg_json and :pg_streaming
       def config(**opts)
         @adapter = opts[:adapter] || ENV.fetch('DB_ADAPTER', :postgres).to_sym
         @user = opts[:user] || ENV.fetch('DB_USER', 'teneo')
@@ -99,7 +105,7 @@ module Teneo
         @host = opts[:host] || ENV.fetch('DB_HOST', 'localhost')
         @port = opts[:port] || ENV.fetch('DB_PORT', 5432).to_i
         @max_connections = opts[:max_connections] || ENV.fetch('DB_MAX_CONNECTIONS', 10).to_i
-        @extensions = %i[async_thread_pool pg_array pg_json pg_streaming]
+        @extensions = %i[async_thread_pool pg_array pg_json pg_streaming] | (opts[:extensions] || [])
       end
 
       # Disconnects from the current database connection if it is valid.

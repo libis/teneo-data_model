@@ -1,0 +1,11 @@
+[
+  {
+    "name": "TeneoSandbox",
+    "url": "https://sandbox.teneo.libis.be",
+    "description": "LIBIS Teneo Sandbox"
+  },{
+    "name": "TeneoProduction",
+    "url": "https://repository.teneo.libis.be",
+    "description": "LIBIS Teneo Production"
+  }
+]

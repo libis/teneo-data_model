@@ -36,7 +36,7 @@ fmt/797,Apple ProRes,,,,URL: https://www.apple.com/final-cut-pro/docs/Apple_ProR
 x-fmt/152,Digital Video,,,,,,,,,,,Text,PRONOM,x-fmt/152,214,video/dv,,Video,dv,,,Ex Libris,03/12/2009,Ex Libris,03/12/2009,
 x-fmt/190,RealMedia,,,,,,,,,,,Text,PRONOM,x-fmt/190,263,application/vnd.rn-realmedia,,Video,"rm,rmvb",,,Ex Libris,03/12/2009,Jan Hutar,01/30/2023,
 x-fmt/382,Macromedia FLV,1,,,,,,,,,Big-endian(Motorola),Binary,PRONOM,x-fmt/382,653,video/x-flv,,Video,flv,,,Ex Libris,03/12/2009,Ex Libris,03/12/2009,
-x-fmt/384,Quicktime,,,"MOV,QT",URL: https://support.apple.com/kb/DL837?locale=en_USS,,,,,"Apple Computer,Inc.",Big-endian(Motorola),Binary,PRONOM,x-fmt/384,658,video/quicktime,,Video,"mov,qtm",,,Ex Libris,03/12/2009,Jan Hutar,01/30/2023,
+x-fmt/384,Quicktime,,,"MOV,QT",URL: https://support.apple.com/kb/DL837?locale=en_US,,,,,"Apple Computer,Inc.",Big-endian(Motorola),Binary,PRONOM,x-fmt/384,658,video/quicktime,,Video,"mov,qtm",,,Ex Libris,03/12/2009,Jan Hutar,01/30/2023,
 x-fmt/385,MPEG-1 Program Stream,,,,,,,,,,Big-endian(Motorola),Binary,PRONOM,x-fmt/385,659,video/mpeg,,Video,"mpeg,mpg",,,Ex Libris,03/12/2009,Jan Hutar,01/30/2023,
 x-fmt/386,MPEG-2 Program Stream,,,,,,,,,,Big-endian(Motorola),Binary,PRONOM,x-fmt/386,660,video/mpeg,,Video,"mod,mpeg,mpg",,,Ex Libris,03/12/2009,Jan Hutar,01/30/2023,
 fmt/410,Internet Archive,1.1,,,,,,,,,,,PRONOM,fmt/410,1158,,nz.govt.natlib.adapter.arc.ArcAdapter,Webharvest,arc,,,Ex Libris,07/17/2012,Ex Libris,07/17/2012,

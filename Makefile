@@ -39,25 +39,65 @@ help: ## Show list and info on common tasks
 	$(call help-admins, $(MAKEFILE_LIST))
 	@echo "$$ADMINTEXT"
 
+.PHONY: status
+status: ## Show the status of the services
+	docker compose ps
+
+.PHONY: logs
+logs: ## Show the logs of the services
+	docker compose logs
+
+.PHONY: logs-%
+logs-%: ## Show the logs of a specific service
+	docker compose logs $*
+
+.PHONY: logf
+logf: ## Show the logs of the services
+	docker compose logs -f
+
+.PHONY: logf-%
+logf-%: ## Show the logs of a specific service
+	docker compose logs -f $*
+
 .PHONY: up ## Start services
 up:
 	docker compose up -d
+
+.PHONY: up-%
+up-%: ## Start a specific service
+	docker compose up $* -d
 
 .PHONY: down
 down: ## Stop services
 	docker compose down
 
-.PHONY: up-%
-up-%: ## Start a specific service
-	docker compose up -d $*
-
 .PHONY: down-%
 down-%: ## Stop a specific service
 	docker compose down $*
 
-.PHONY: run-%
-run-%: ## Run a specific service
-	docker compose up $*
+.PHONY: restart-%
+restart-%: ## Restart a specific service
+	docker compose restart $*
+
+.PHONY: migrations
+migrations: ## Run the database migrations
+	docker compose run --rm db_tool rake db:migrate
+
+.PHONY: seeds
+seeds: ## Run the database seeds
+	docker compose run --rm db_tool rake db:seed
+
+.PHONY: tool
+tool: ## Run the database tool
+	docker compose run -it --rm db_tool irb
+
+.PHONY: recreate
+recreate: ## Recreate the database
+	docker compose run --rm db_tool rake db:recreate
+
+.PHONY: initialize
+initialize: up run-db_migrations run-db_seed ## Initialize the database
+
 
 .PHONY: force
 FORCE:
@@ -80,22 +120,8 @@ push: build
 	&& docker push ${DOCKER_IMAGE}:latest
 
 .PHONY: clean
-clean:
-	docker rm -f $(shell docker ps -aq)
+clean: down
+	docker volume prune --all -f --filter "label=be.libis.be.component=db"
 
-.PHONY: run
-run:
-	docker run -p 8080:8080 -d ${DOCKER_IMAGE}:$(shell git rev-parse --short HEAD)
-
-.PHONY: stop
-stop:
-	docker stop $(shell docker ps -aq)
-
-.PHONY: test
-test:
-	go test -v $(shell go list ./... | grep -v vendor)
-
-.PHONY: lint
-lint:
-	golangci-lint run
-
+.PHONY: reset
+reset: clean up

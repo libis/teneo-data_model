@@ -2,6 +2,7 @@
 
 Sequel.migration do
   change do
+    puts "Creating table 'formats'..."
     create_table :formats do
       String :puid, null: false, primary_key: true
 
