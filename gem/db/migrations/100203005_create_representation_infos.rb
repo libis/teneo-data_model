@@ -9,8 +9,6 @@ Sequel.migration do
       String :preservation_type, null: false
       String :usage_type, null: false
       String :representation_code
-
-      Integer :lock_version, null: false, default: 0
     end
   end
 end

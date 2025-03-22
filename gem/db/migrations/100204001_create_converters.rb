@@ -4,7 +4,7 @@ Sequel.migration do
   change do
     puts "Creating table 'converters'..."
     create_table :converters do
-      primary_key :id
+      column :id, :uuid, primary_key: true, default: Sequel.function(:gen_random_uuid)
 
       String :category, null: false, default: 'converter'
       String :name, null: false
@@ -18,8 +18,6 @@ Sequel.migration do
       column :output_formats, 'text[]', index: { type: :gin }
 
       column :parameters, 'jsonb', null: false, default: '{}', index: { type: :gin }
-
-      Integer :lock_version, null: false, default: 0
     end
   end
 end

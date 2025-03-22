@@ -1,5 +1,7 @@
 {
   "name": "TeneoProduction",
   "url": "https://repository.teneo.libis.be",
-  "description": "LIBIS Teneo Production"
+  "description": "LIBIS Teneo Production",
+  "producer_agent": "ingester",
+  "producer_password": "MV7mp7ZhEe6y"
 }

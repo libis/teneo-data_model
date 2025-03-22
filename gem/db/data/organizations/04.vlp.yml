@@ -1,0 +1,20 @@
+- name: 'vlp'
+  description: 'Vlaams Parlement'
+  mapping:
+    TeneoProduction:
+      code: 'VLP'
+  storages:
+    - name: 'sftp'
+      location: '/nas/vol03/sftp_upload/kadoc'
+      purpose: 'upload'
+    - name: 'uploader'
+      location: '/nas/vol04/uploader/data/kadoc'
+      purpose: 'upload'
+  material_flows:
+   -  name: 'vlp'
+      description: 'Default material flow'
+      ingest_type: METS
+      mapping:
+        TeneoProduction:
+          code: '664578132'
+          ingest_dir: '/nas/vol04/ingester-deposit/prod/vlp'

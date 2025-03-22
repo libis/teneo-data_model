@@ -1,0 +1,22 @@
+- name: 'kadoc'
+  description: 'KADOC'
+  mapping:
+    TeneoSandbox:
+      code: 'KADOC'
+    TeneoProduction:
+      code: 'KADOC'
+  storages:
+    - name: 'uploader'
+      location: '/nas/vol04/uploader/data/kadoc'
+      purpose: 'upload'
+    - name: 'sftp'
+      location: '/nas/vol03/sftp_upload/kadoc'
+      purpose: 'upload'
+  material_flows:
+    - name: 'kadoc'
+      description: 'Default material flow'
+      ingest_type: METS
+      mapping:
+        TeneoProduction:
+          code: 'KADOC'
+          ingest_dir: '/nas/vol04/ingester-deposit/prod/kadoc'

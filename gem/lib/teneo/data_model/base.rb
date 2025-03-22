@@ -2,6 +2,7 @@
 
 require 'sequel'
 require 'yaml'
+require 'active_support/core_ext/hash/keys'
 
 require_relative 'database'
 
@@ -46,35 +47,31 @@ module Teneo
         # attributes that are managed by the database or Sequel, and are not
         # meaningful when converting to or from a hash or json.
         def volatile_attributes
-          %i[id created_at updated_at lock_version]
+          %i[id created_at updated_at]
         end
 
-        def from_yaml_file(file:, key: nil)
+        def from_yaml_file(file:, key: nil, &block)
           YAML.load_file(file).then do |data|
-            [data].flatten.map { |d| from_hash(data: d, key: key) }
+            [data].flatten.map { |d| from_hash_(data: d, key: key, &block) }
           end
         end
 
-        def from_csv_file(file:, key: nil, **opts, &block)
-          CSV.read(file, **opts[:csv_opts]).then do |data|
-            opts[:header_filter]&.call(data)
-            data.map { |d| from_hash(data: d.to_hash, key: key, &block) }
-          end
+        def from_json_file(file:, key: nil, &block)
+          from_json(data: File.read(file), key: key, &block)
         end
 
-        def from_json_file(file:, key: nil)
-          from_json(data: File.read(file), key: key)
-        end
-
-        def from_json(data:, key: nil)
+        def from_json(data:, key: nil, &block)
           data = JSON.parse(data)
-          from_hash(data: data, key: key)
+          from_hash_(data: data, key: key, &block)
+        end
+
+        def from_hash_(data:, key: nil, &block)
+          from_hash(data: data.deep_symbolize_keys!, key: key&.to_sym, &block)
         end
 
         def from_hash(data:, key: nil, &block)
-          data = data.transform_keys(&:to_sym)
-          key = key&.to_sym || primary_key
-          if key == primary_key
+          key ||= primary_key
+          if key == primary_key && data.key?(key)
             update_or_create_by_pk(data:, &block)
           else
             data.delete(primary_key)

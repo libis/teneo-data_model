@@ -1,0 +1,56 @@
+- name: 'test'
+  description: 'Test Institution'
+  mapping:
+    TeneoSandbox:
+      code: 'TESTINS'
+  storages:
+    - name: 'uploader'
+      location: '/nas/vol04/uploader/data/libis'
+      purpose: 'upload'
+  material_flows:
+    - name: 'test'
+      description: 'Default material flow'
+      ingest_type: METS
+      mapping:
+        TeneoSandbox:
+          code: '23100788'
+          ingest_dir: '/nas/vol04/ingester-deposit/test/test'
+    - name: 'test_no_techmd'
+      description: 'Material flow without technical metadata extraction'
+      ingest_type: METS
+      mapping:
+        TeneoSandbox:
+          code: '25033892'
+          ingest_dir: '/nas/vol04/ingester-deposit/test/test'
+- name: 'demo'
+  description: 'Demo Institution'
+  mapping:
+    TeneoSandbox:
+      code: 'INS00'
+    TeneoProduction:
+      code: 'INS00'
+  storages:
+    - name: 'uploader'
+      location: '/nas/vol04/uploader/data/libis'
+      purpose: 'upload'
+  material_flows:
+    - name: demo
+      description: 'Material flow without collections'
+      ingest_type: METS
+      mapping:
+        TeneoSandbox:
+          code: '27588625'
+          ingest_dir: '/nas/vol04/ingester-deposit/test/demo'
+        TeneoProduction:
+          code: '669061730'
+          ingest_dir: '/nas/vol04/ingester-deposit/prod/demo'
+    - name: demo_collections
+      description: 'Material flow with collections via Dublin Core metadata'
+      ingest_type: METS
+      mapping:
+        TeneoSandbox:
+          code: '27588630'
+          ingest_dir: '/nas/vol04/ingester-deposit/test/demo'
+        TeneoProduction:
+          code: '669061731'
+          ingest_dir: '/nas/vol04/ingester-deposit/prod/demo'

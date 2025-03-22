@@ -4,14 +4,12 @@ Sequel.migration do
   change do
     puts "Creating table 'ingest_stages'..."
     create_table :ingest_stages do
-      primary_key :id
+      primary_key :id, :uuid, default: Sequel.function(:gen_random_uuid)
 
       String :stage, null: false
 
-      foreign_key :ingest_workflow_id, :ingest_workflows, null: false, on_delete: :cascade, on_update: :cascade
-      foreign_key :stage_workflow_id, :stage_workflows, null: false, on_delete: :restrict, on_update: :cascade
-
-      column :parameters, 'jsonb', null: false, default: '{}', index: { type: :gin }
+      foreign_key :ingest_workflow_id, :ingest_workflows, type: :uuid, null: false, on_delete: :cascade, on_update: :cascade
+      foreign_key :stage_workflow_id, :stage_workflows, type: :uuid, null: false, on_delete: :restrict, on_update: :cascade
 
       Integer :lock_version, null: false, default: 0
 

@@ -3,6 +3,12 @@
 require 'dotenv'
 Dotenv.load('.env.local', '.env')
 
+begin
+  require 'rspec/core/rake_task'
+  RSpec::Core::RakeTask.new(:spec)
+rescue LoadError # rubocop:disable Lint/SuppressedException
+end
+
 require 'sequel'
 require 'logger'
 
@@ -24,18 +30,6 @@ def db_connect(**opts)
 end
 
 namespace :db do
-  desc 'Recreate database'
-  task :recreate do
-    puts 'Recreate the database'
-    puts '====================='
-    db_connect(database: 'postgres') do |db|
-      puts 'Dropping database ...'
-      db.execute "DROP DATABASE IF EXISTS #{ENV.fetch('DB_NAME', 'teneo')} WITH (FORCE)"
-      puts 'Creating database ...'
-      db.execute "CREATE DATABASE #{ENV.fetch('DB_NAME', 'teneo')}"
-    end
-  end
-
   desc 'Run migrations'
   task :migrate, [:version] do |_t, args|
     puts 'Run migrations'
@@ -61,7 +55,4 @@ namespace :db do
       Sequel::Seeder.apply(db, './db/seeds')
     end
   end
-
-  desc 'Reset database'
-  task reset: %i[recreate migrate seed]
 end

@@ -9,6 +9,9 @@ Sequel.migration do
       String :url, null: false
       String :description
 
+      String :producer_agent
+      String :producer_password
+
       Integer :lock_version, null: false, default: 0
     end
   end

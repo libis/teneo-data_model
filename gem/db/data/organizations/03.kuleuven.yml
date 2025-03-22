@@ -1,0 +1,98 @@
+- name: 'kuleuven'
+  description: 'KU Leuven'
+  mapping:
+    TeneoSandbox:
+      code: 'KUL'
+    TeneoProduction:
+      code: 'KUL'
+  storages:
+    - name: 'digilab'
+      location: '/nas/ghum_digitalisering/LIBIS_KLAARVOORINGEST/TIF_KLAAR'
+      purpose: 'upload'
+  material_flows:
+    - name: 'kul'
+      description: 'Default material flow for ingester'
+      ingest_type: METS
+      mapping:
+        TeneoProduction:
+          code: '475403023'
+          ingest_dir: '/nas/vol04/ingester-deposit/prod/kul'
+    - name: 'kul_dc_collections'
+      description: 'Material flow for ingesting in collections via Dublin Core metadata'
+      ingest_type: METS
+      mapping:
+        TeneoProduction:
+          code: '243613569'
+          ingest_dir: '/nas/vol04/ingester-deposit/prod/kul'
+    - name: 'kul_fixity_only'
+      description: 'Material flow for ingesting with no validation, except for fixity checks'
+      ingest_type: METS
+      mapping:
+        TeneoProduction:
+          code: '475403338'
+          ingest_dir: '/nas/vol04/ingester-deposit/prod/kul'
+    - name: 'kul_fixity_only_dc_collections'
+      description: 'Material flow for ingesting with no validation, except for fixity checks and with support for collections via Dublin Core metadata'
+      ingest_type: METS
+      mapping:
+        TeneoProduction:
+          code: '245372143'
+          ingest_dir: '/nas/vol04/ingester-deposit/prod/kul'
+    - name: 'kul_etd'
+      description: 'Material flow for ingesting ETDs'
+      ingest_type: METS
+      mapping:
+        TeneoProduction:
+          code: '475359286'
+          ingest_dir: '/nas/vol04/ingester-deposit/prod/kul'
+
+- name: 'ua'
+  description: 'Universiteitsarchief'
+  mapping:
+    TeneoSandbox:
+      code: 'UA'
+    TeneoProduction:
+      code: 'UA'
+  storages:
+    - name: 'uploader'
+      location: '/nas/vol04/uploader/data/buar'
+      purpose: 'upload'
+
+- name: 'alamire'
+  description: 'Alamire Foundation'
+  mapping:
+    TeneoProduction:
+      code: 'ALAMIRE'
+  storages:
+    - name: 'uploader'
+      location: '/nas/vol04/uploader/data/alamire'
+      purpose: 'upload'
+    - name: 'sftp'
+      location: '/nas/vol03/sftp_upload/alamire'
+      purpose: 'upload'
+  material_flows:
+    - name: alamire
+      description: 'Default material flow for ingester'
+      ingest_type: METS
+      mapping:
+        TeneoProduction:
+          code: '301915561'
+          ingest_dir: '/nas/vol04/ingester-deposit/prod/alamire'
+
+- name: 'cag'
+  description: 'Centrum Agrarische Geschiedenis'
+  mapping:
+    TeneoProduction:
+      code: 'KUL'
+  storages:
+    - name: 'uploader'
+      location: '/nas/vol04/uploader/data/cag'
+      purpose: 'upload'
+  material_flows:
+    - name: 'CAG'
+      description: 'CAG default material flow'
+      ingest_type: METS
+      mapping:
+        TeneoProduction:
+          code: '475359133'
+          ingest_dir: '/nas/vol04/ingester-deposit/prod/cag'

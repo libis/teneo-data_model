@@ -16,15 +16,14 @@ Sequel.migration do
 
       column :properties, 'jsonb', null: false, default: '{}', index: { type: :gin }
 
-      foreign_key :package_id, :packages, null: true, on_delete: :cascade, on_update: :cascade
-
+      foreign_key :package_id, :packages, type: :uuid, null: true, on_delete: :cascade, on_update: :cascade
       foreign_key :parent_id, :items, null: true, on_delete: :cascade, on_update: :cascade
 
       Integer :position, null: false, default: 0
 
       Integer :lock_version, null: false, default: 0
 
-      index %i[package_id parent_id position], unique: true
+      index %i[package_id parent_id position id]
     end
   end
 end

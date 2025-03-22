@@ -4,7 +4,15 @@ services:
   db:
     image: postgres:17-alpine
     user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
-    command: ["postgres", "-c", "log_hostname=off"]
+    command: 
+      - -c
+      - log_hostname=off
+      - -c
+      - ssl=on
+      - -c
+      - ssl_cert_file=/var/lib/postgresql/data/server.crt
+      - -c
+      - ssl_key_file=/var/lib/postgresql/data/server.key
     init: true
     shm_size: 128mb
     environment:
@@ -18,7 +26,7 @@ services:
       - "${DB_PORT}:5432"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - db_data:/var/lib/postgresql/data
+      - ./db_data:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]

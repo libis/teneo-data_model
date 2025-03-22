@@ -61,15 +61,13 @@ module Teneo
           password: @password,
           host: @host,
           port: @port,
+          ssl_mode: 'prefer',
           database: @database,
           max_connections: @max_connections,
           extensions: @extensions
         ) do |database|
           database.stream_all_queries = true
-          if ENV['LOGGING']&.downcase == 'debug'
-            database.sql_log_level = :debug
-            database.loggers << Logger.new($stdout)
-          end
+          database.sql_log_level = :debug if ENV['LOGGING']&.downcase == 'debug'
           database
         end
       end

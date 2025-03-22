@@ -4,7 +4,7 @@ Sequel.migration do
   change do
     puts "Creating table 'conversion_workflows'..."
     create_table :conversion_workflows do
-      primary_key :id
+      primary_key :id, :uuid, default: Sequel.function(:gen_random_uuid)
 
       String :name, null: false, unique: true
       String :description
@@ -14,8 +14,6 @@ Sequel.migration do
 
       column :input_formats, 'text[]', null: false, index: { type: :gin }
       String :input_file_regex
-
-      column :parameters, 'jsonb', null: false, default: '{}', index: { type: :gin }
 
       Integer :lock_version, null: false, default: 0
     end

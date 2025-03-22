@@ -87,17 +87,17 @@ migrations: ## Run the database migrations
 seeds: ## Run the database seeds
 	docker compose run --rm db_tool rake db:seed
 
+.PHONY: test
+test: ## Run the tests
+	docker compose run --rm db_tool rake spec
+
 .PHONY: tool
 tool: ## Run the database tool
 	docker compose run -it --rm db_tool irb
 
-.PHONY: recreate
-recreate: ## Recreate the database
-	docker compose run --rm db_tool rake db:recreate
-
-.PHONY: initialize
-initialize: up run-db_migrations run-db_seed ## Initialize the database
-
+.PHONY: tool_shell
+tool_shell: ## Run the database tool
+	docker compose run -it --rm db_tool bash
 
 .PHONY: force
 FORCE:
@@ -105,6 +105,10 @@ FORCE:
 .PHONY: bundle_install
 bundle_install: ### Install gem dependencies
 	cd gem && bundle install
+
+.PHONY: bundle_update
+bundle_update: ### Update gem dependencies
+	cd gem && bundle update
 
 .PHONY: all
 all: build
@@ -119,9 +123,19 @@ push: build
 	docker push ${DOCKER_IMAGE}:$(shell git rev-parse --short HEAD)		\	
 	&& docker push ${DOCKER_IMAGE}:latest
 
-.PHONY: clean
+.PHONY: clean ### Shut down the services and remove the database
 clean: down
 	docker volume prune --all -f --filter "label=be.libis.be.component=db"
+	rm -fr db_data/pgdata
 
-.PHONY: reset
-reset: clean up
+.PHONY: reset ### Recreate the database to initial content
+reset: clean up migrations seeds
+
+.PHONY: db_config ### Set up database certificates for SSL
+db_config:
+	mkdir -p db_data
+	cd db_data && \
+		openssl req -new -text -passout pass:$(CERT_PASS) -subj /CN=localhost -out server.req && \
+		openssl rsa -in privkey.pem -passin pass:$(CERT_PASS) -out server.key && \
+		openssl req -x509 -in server.req -text -key server.key -out server.crt && \
+		chmod 600 server.key

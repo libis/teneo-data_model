@@ -4,7 +4,7 @@ Sequel.migration do
   change do
     puts "Creating table 'ingest_models'..."
     create_table :ingest_models do
-      primary_key :id
+      column :id, :uuid, primary_key: true, default: Sequel.function(:gen_random_uuid)
 
       String :name, null: false, unique: true
       String :description
@@ -17,10 +17,8 @@ Sequel.migration do
 
       String :identifier
 
-      foreign_key :access_right, :access_rights, type: String, null: false, on_delete: :restrict, on_update: :cascade
-      foreign_key :retention_policy, :retention_policies, type: String, null: false, on_delete: :restrict, on_update: :cascade
-
-      column :parameters, 'jsonb', null: false, default: '{}', index: { type: :gin }
+      foreign_key :access_right_name, :access_rights, type: String, null: false, on_delete: :restrict, on_update: :cascade
+      foreign_key :retention_policy_name, :retention_policies, type: String, null: false, on_delete: :restrict, on_update: :cascade
 
       Integer :lock_version, null: false, default: 0
     end

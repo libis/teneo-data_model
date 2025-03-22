@@ -4,10 +4,9 @@ Sequel.migration do
   change do
     puts "Creating table 'users'..."
     create_table :users do
-      primary_key :id
+      column :id, :uuid, primary_key: true, default: Sequel.function(:gen_random_uuid)
 
       String :email, null: false, index: { unique: true }
-      String :uuid, null: false, index: { unique: true }
 
       String :first_name
       String :last_name

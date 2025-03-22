@@ -4,7 +4,7 @@ Sequel.migration do
   change do
     puts "Creating table 'ingest_agreements'..."
     create_table :ingest_agreements do
-      primary_key :id
+      column :id, :uuid, primary_key: true, default: Sequel.function(:gen_random_uuid)
 
       String :name, null: false
       String :description
@@ -15,10 +15,9 @@ Sequel.migration do
       column :contact_system, 'text[]', index: { type: :gin }
       String :collection_description
 
-      foreign_key :organization_id, null: false
-
-      foreign_key :producer_id, :producers, null: false, on_delete: :restrict, on_update: :restrict
-      foreign_key :material_flow_id, :material_flows, null: false, on_delete: :restrict, on_update: :restrict
+      foreign_key :organization_id, :organizations, type: :uuid, null: false, on_delete: :restrict, on_update: :restrict
+      column :material_flow_name, String, null: false
+      foreign_key %i[organization_id material_flow_name], :material_flows, null: false, on_delete: :restrict, on_update: :restrict
 
       Integer :lock_version, null: false, default: 0
 

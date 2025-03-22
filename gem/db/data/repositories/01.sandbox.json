@@ -1,5 +1,7 @@
 {
     "name": "TeneoSandbox",
     "url": "https://sandbox.teneo.libis.be",
-    "description": "LIBIS Teneo Sandbox"
+    "description": "LIBIS Teneo Sandbox",
+    "producer_agent": "admin1",
+    "producer_password": "@JWc6fT8yDAR"
 }

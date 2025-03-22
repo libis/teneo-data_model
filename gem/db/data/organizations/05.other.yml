@@ -1,0 +1,23 @@
+- name: 'crkc'
+  description: 'Centrum voor Religieuze Kunst en Cultuur'
+  mapping:
+    TeneoSandbox:
+      code: 'CRKC'
+    TeneoProduction:
+      code: 'CRKC'
+  storages:
+    - name: 'uploader'
+      location: '/nas/vol04/uploader/data/CRKC'
+      purpose: 'upload'
+  material_flows:
+    - name: 'crkc'
+      description: 'Default material flow'
+      ingest_type: METS
+      mapping:
+        TeneoSandbox:
+          code: ''
+          ingest_dir: '/nas/vol04/ingester-deposit/test/crkc'
+        TeneoProduction:
+          code: '242348950'
+          ingest_dir: '/nas/vol04/ingester-deposit/prod/crkc'
+  

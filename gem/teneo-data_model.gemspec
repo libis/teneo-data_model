@@ -31,17 +31,21 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency 'csv', '~> 3.3.2'
-  spec.add_runtime_dependency 'pg', '~> 1.5'
-  spec.add_runtime_dependency 'sequel', '~> 5.76'
-  spec.add_runtime_dependency 'sequel_pg', '~> 1.17'
-  spec.add_runtime_dependency 'sequel-seed', '~> 1.1'
+  spec.add_runtime_dependency 'activesupport', '~> 8.0', '>= 8.0.2'
+  spec.add_runtime_dependency 'csv', '~> 3.0', '>= 3.3.2'
+  spec.add_runtime_dependency 'naturally', '~> 2.0', '>= 2.2.1'
+  spec.add_runtime_dependency 'pg', '~> 1.0', '>= 1.5'
+  spec.add_runtime_dependency 'sequel', '~> 5.0', '>= 5.76'
+  spec.add_runtime_dependency 'sequel_pg', '~> 1.0', '>= 1.17.2'
+  spec.add_runtime_dependency 'sequel_secure_password', '~> 0.0', '>= 0.2.15'
+  spec.add_runtime_dependency 'sequel-seed', '~> 1.0', '>= 1.1'
 
-  spec.add_runtime_dependency 'dotenv'
-  spec.add_runtime_dependency 'dry-configurable'
-  spec.add_runtime_dependency 'dry-struct'
-  spec.add_runtime_dependency 'dry-types'
-  spec.add_runtime_dependency 'method_source'
+  spec.add_runtime_dependency 'dotenv', '~> 3.0', '>= 3.1.7'
+  spec.add_runtime_dependency 'dry-configurable', '~> 1.0', '>= 1.3.0'
+  spec.add_runtime_dependency 'dry-struct', '~> 1.0', '>= 1.8.0'
+  spec.add_runtime_dependency 'dry-types', '~> 1.0', '>= 1.8.2'
+  spec.add_runtime_dependency 'method_source', '~> 1.0', '>= 1.1.0'
 
-  spec.add_development_dependency 'nokogiri', '~> 1.18.3'
+  spec.add_development_dependency 'nokogiri', '~> 1.0', '>= 1.18.4'
+  spec.add_development_dependency 'rexml', '~> 3.0', '>= 3.4.1'
 end
