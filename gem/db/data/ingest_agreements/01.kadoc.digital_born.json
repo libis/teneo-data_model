@@ -1,0 +1,18 @@
+{
+    "org_name": "kadoc",    
+    "name": "KADOC Digital Born",
+    "description": "KADOC Digital Born archives",
+    "material_flow": "no_collections",
+    "contact_ingest": [
+        "Katrien Wijns",
+        "Ganesh Venkatasubban"
+    ],
+    "contact_collection": [
+        "Katrien Wijns",
+        "Luc Schokkaert"
+    ],
+    "contact_system": [
+        "Ganesh Venkatasubban"
+    ],
+    "collection_description": "KADOC Digital Born archives"
+}

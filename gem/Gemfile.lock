@@ -41,6 +41,7 @@ GEM
     concurrent-ruby (1.3.5)
     connection_pool (2.5.0)
     csv (3.3.2)
+    date (3.4.1)
     diff-lcs (1.6.0)
     dotenv (3.1.7)
     drb (2.2.1)
@@ -72,6 +73,11 @@ GEM
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
+    io-console (0.8.0)
+    irb (1.15.1)
+      pp (>= 0.6.0)
+      rdoc (>= 4.0.0)
+      reline (>= 0.4.2)
     json (2.10.2)
     language_server-protocol (3.17.0.4)
     lint_roller (1.1.0)
@@ -90,13 +96,23 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.5.9)
+    pp (0.6.2)
+      prettyprint
+    prettyprint (0.2.0)
     prism (1.3.0)
+    psych (5.2.3)
+      date
+      stringio
     racc (1.8.1)
     rainbow (3.1.1)
     rake (13.2.1)
     rbs (3.9.0)
       logger
+    rdoc (6.13.0)
+      psych (>= 4.0.0)
     regexp_parser (2.10.0)
+    reline (0.6.0)
+      io-console (~> 0.5)
     rexml (3.4.1)
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
@@ -142,6 +158,7 @@ GEM
       bcrypt (>= 3.1, < 4.0)
       sequel (>= 4.1.0, < 6.0)
     sorbet-runtime (0.5.11942)
+    stringio (3.1.6)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (3.1.4)
@@ -156,6 +173,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
+  irb (~> 1.0, >= 1.15.1)
   nokogiri (~> 1.0, >= 1.18.4)
   rake (~> 13.0, >= 13.2.1)
   rexml (~> 3.0, >= 3.4.1)

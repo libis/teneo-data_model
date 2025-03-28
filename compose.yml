@@ -76,20 +76,22 @@ services:
     image: ${RUBY_IMAGE}:${RUBY_VERSION}
     user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
     working_dir: /app
-    command: ["rake", "db:migrate"]
+    command: "irb"
     depends_on:
       db:
         condition: service_healthy
         restart: true
-    env_file:
-      - path: ./.env
-        required: true
-      - path: ./.env.local
-        required: false
     environment:
       BUNDLE_COMMAND: install
       GEMS_PATH: /app/vendor/bundle
       BUNDLE_PATH: /app/vendor/bundle
+      GIT_DISCOVERY_ACROSS_FILESYSTEM: 1
+      DB_ADAPTER: ${DB_ADAPTER}
+      DB_HOST: db
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
     networks:
       - db_net
     volumes:
