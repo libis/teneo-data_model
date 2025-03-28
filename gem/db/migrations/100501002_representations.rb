@@ -4,7 +4,7 @@ Sequel.migration do
   change do
     puts "Creating table 'representations'..."
     create_table :representations do
-      primary_key :id, :uuid, default: Sequel.function(:gen_random_uuid)
+      column :id, :uuid, primary_key: true, default: Sequel.function(:gen_random_uuid)
 
       Integer :position, null: false, default: 0
 
@@ -18,7 +18,7 @@ Sequel.migration do
 
       foreign_key :representation_id, :representations, type: :uuid, null: true, on_delete: :restrict, on_update: :cascade
 
-      foreign_key :access_right_name, :access_rights, type: String, null: false, on_delete: :restrict, on_update: :cascade
+      foreign_key :access_right_id, :access_rights, type: :uuid, null: false, on_delete: :restrict, on_update: :cascade
       foreign_key :representation_info_name, :representation_infos, type: String, null: false, on_delete: :restrict, on_update: :cascade
 
       Integer :lock_version, null: false, default: 0

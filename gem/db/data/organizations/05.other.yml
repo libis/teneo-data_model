@@ -10,7 +10,7 @@
       location: '/nas/vol04/uploader/data/CRKC'
       purpose: 'upload'
   material_flows:
-    - name: 'crkc'
+    - name: default
       description: 'Default material flow'
       ingest_type: METS
       mapping:

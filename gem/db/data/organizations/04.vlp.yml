@@ -11,7 +11,7 @@
       location: '/nas/vol04/uploader/data/kadoc'
       purpose: 'upload'
   material_flows:
-   -  name: 'vlp'
+   -  name: default
       description: 'Default material flow'
       ingest_type: METS
       mapping:

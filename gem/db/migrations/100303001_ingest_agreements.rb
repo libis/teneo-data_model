@@ -16,8 +16,7 @@ Sequel.migration do
       String :collection_description
 
       foreign_key :organization_id, :organizations, type: :uuid, null: false, on_delete: :restrict, on_update: :restrict
-      column :material_flow_name, String, null: false
-      foreign_key %i[organization_id material_flow_name], :material_flows, null: false, on_delete: :restrict, on_update: :restrict
+      foreign_key :material_flow_id, :material_flows, type: :uuid, null: false, on_delete: :restrict, on_update: :restrict
 
       Integer :lock_version, null: false, default: 0
 

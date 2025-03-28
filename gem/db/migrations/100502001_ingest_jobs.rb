@@ -4,7 +4,7 @@ Sequel.migration do
   change do
     puts "Creating table 'ingest_jobs'..."
     create_table :ingest_jobs do
-      primary_key :id, :uuid, default: Sequel.function(:gen_random_uuid)
+      column :id, :uuid, primary_key: true, default: Sequel.function(:gen_random_uuid)
 
       String :name, null: false
       String :description

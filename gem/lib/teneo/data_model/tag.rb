@@ -3,6 +3,8 @@
 module Teneo
   module DataModel
     class Tag < Teneo::DataModel::Base
+      plugin :optimistic_locking
+
       many_to_many :formats, class: Teneo::DataModel::Format, join_table: :tagged_formats, left_key: :tag, right_key: :format
       many_to_many :child_tags, class: self, join_table: :tagged_tags, left_key: :parent, right_key: :tag
       many_to_many :parent_tags, class: self, join_table: :tagged_tags, left_key: :tag, right_key: :parent
@@ -86,7 +88,7 @@ module Teneo
         super data:, key: do |tag|
           block.call(tag) if block_given?
           children&.each do |child|
-            t = Teneo::DataModel::Tag.from_hash_(data: child, key: key, &block)
+            t = Teneo::DataModel::Tag.from_hash(data: child, key: key, &block)
             tag.add_child_tag t
           end
           uids&.split(/[\s,]+/)&.each do |uid|

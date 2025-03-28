@@ -26,12 +26,7 @@ module Teneo
 
         data[:organization_id] = organization.id
 
-        mapping = data.delete(:mapping)
-
-        mf = super(data:, key:, &block)
-        mf.load_mapping(data: mapping)
-
-        mf
+        super(data:, key: %i[organization_id name], &block)
       end
     end
   end

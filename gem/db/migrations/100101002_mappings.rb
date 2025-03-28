@@ -7,12 +7,12 @@ Sequel.migration do
       foreign_key :repository_name, :repositories, type: String, null: false, on_delete: :cascade, on_update: :cascade
 
       String :host_type, null: false
-      String :host_name, null: false
+      column :host_id, :uuid, null: false
 
       String :key, null: false
-      String :value, null: false
+      String :value, null: true
 
-      primary_key %i[host_type host_name repository_name key]
+      primary_key %i[host_type host_id repository_name key]
 
       Integer :lock_version, null: false, default: 0
     end

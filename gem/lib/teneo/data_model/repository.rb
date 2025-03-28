@@ -6,6 +6,8 @@ module Teneo
   module DataModel
     # ORM Model for the repositories table
     class Repository < Teneo::DataModel::Base
+      plugin :optimistic_locking
+
       # Validates that the repository name is safe and doesn't contain any illegal characters.
       def validate
         super

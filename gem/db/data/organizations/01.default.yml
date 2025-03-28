@@ -8,14 +8,14 @@
       location: '/nas/vol04/uploader/data/libis'
       purpose: 'upload'
   material_flows:
-    - name: 'test'
+    - name: 'default'
       description: 'Default material flow'
       ingest_type: METS
       mapping:
         TeneoSandbox:
           code: '23100788'
           ingest_dir: '/nas/vol04/ingester-deposit/test/test'
-    - name: 'test_no_techmd'
+    - name: 'no_techmd'
       description: 'Material flow without technical metadata extraction'
       ingest_type: METS
       mapping:
@@ -34,7 +34,7 @@
       location: '/nas/vol04/uploader/data/libis'
       purpose: 'upload'
   material_flows:
-    - name: demo
+    - name: default
       description: 'Material flow without collections'
       ingest_type: METS
       mapping:
@@ -44,7 +44,7 @@
         TeneoProduction:
           code: '669061730'
           ingest_dir: '/nas/vol04/ingester-deposit/prod/demo'
-    - name: demo_collections
+    - name: collections
       description: 'Material flow with collections via Dublin Core metadata'
       ingest_type: METS
       mapping:

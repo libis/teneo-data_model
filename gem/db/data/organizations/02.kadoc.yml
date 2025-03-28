@@ -13,7 +13,7 @@
       location: '/nas/vol03/sftp_upload/kadoc'
       purpose: 'upload'
   material_flows:
-    - name: 'kadoc'
+    - name: default
       description: 'Default material flow'
       ingest_type: METS
       mapping:

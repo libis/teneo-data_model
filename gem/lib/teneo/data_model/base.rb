@@ -62,29 +62,24 @@ module Teneo
 
         def from_json(data:, key: nil, &block)
           data = JSON.parse(data)
-          from_hash_(data: data, key: key, &block)
+          [data].flatten.map { |d| from_hash_(data: d, key: key, &block) }
         end
 
         def from_hash_(data:, key: nil, &block)
-          from_hash(data: data.deep_symbolize_keys!, key: key&.to_sym, &block)
+          from_hash(data: data.deep_symbolize_keys!, key:, &block)
         end
 
         def from_hash(data:, key: nil, &block)
-          key ||= primary_key
-          if key == primary_key && data.key?(key)
-            update_or_create_by_pk(data:, &block)
-          else
-            data.delete(primary_key)
-            update_or_create(data.slice(key), data, &block)
-          end
-        end
-
-        def update_or_create_by_pk(data:, &block)
-          key = data.delete(primary_key)
-          obj = find(primary_key => key) || new
-          obj.send("#{primary_key}=", key)
+          key = [key].flatten.compact.map(&:to_sym)
+          pk = [primary_key].flatten
+          key = pk if key.empty?
+          obj = find(data.slice(*key)) || new # find or create
+          data_pk = data.slice(*pk)
+          data_pk.each { |k, v| obj.send("#{k}=", v) }
+          data_other = data.except(*pk)
+          obj.set_fields(data_other, data_other.keys)
           block.call(obj) if block_given?
-          obj.update(data)
+          obj.save
           obj
         end
       end

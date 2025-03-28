@@ -6,6 +6,8 @@ Sequel.migration do
     create_table :representation_infos do
       String :name, null: false, primary_key: true
 
+      String :description
+
       String :preservation_type, null: false
       String :usage_type, null: false
       String :representation_code

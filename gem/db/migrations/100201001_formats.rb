@@ -23,8 +23,6 @@ Sequel.migration do
       column :properties, 'jsonb', null: false, default: '{}', index: { type: :gin }
 
       Date :created_at, null: false, default: Sequel::CURRENT_TIMESTAMP
-
-      Integer :lock_version, null: false, default: 0
     end
   end
 end

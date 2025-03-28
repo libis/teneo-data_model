@@ -82,8 +82,9 @@ services:
         condition: service_healthy
         restart: true
     env_file:
-      - .env
-      - path: .env.local
+      - path: ./.env
+        required: true
+      - path: ./.env.local
         required: false
     environment:
       BUNDLE_COMMAND: install

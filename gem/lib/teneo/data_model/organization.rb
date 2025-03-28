@@ -5,6 +5,8 @@ require 'fileutils'
 module Teneo
   module DataModel
     class Organization < Teneo::DataModel::Base
+      plugin :optimistic_locking
+
       include Teneo::DataModel::WithMapping
 
       one_to_many :memberships, remover: lambda(&:destroy)
@@ -47,18 +49,16 @@ module Teneo
       end
 
       def self.from_hash(data:, key: nil, &block)
-        mapping = data.delete(:mapping)
         storages = data.delete(:storages)
         material_flows = data.delete(:material_flows)
         org = super(data:, key:, &block)
-        org.load_mapping(data: mapping)
         storages&.each do |storage|
           storage[:org_name] = org.name
-          Teneo::DataModel::Storage.from_hash_(data: storage, key: :name)
+          Teneo::DataModel::Storage.from_hash(data: storage)
         end
         material_flows&.each do |material_flow|
           material_flow[:org_name] = org.name
-          Teneo::DataModel::MaterialFlow.from_hash_(data: material_flow, key: nil)
+          Teneo::DataModel::MaterialFlow.from_hash(data: material_flow)
         end
       end
     end

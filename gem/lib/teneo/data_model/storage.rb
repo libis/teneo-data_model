@@ -5,6 +5,8 @@ require 'teneo/data_model'
 module Teneo
   module DataModel
     class Storage < Teneo::DataModel::Base
+      plugin :optimistic_locking
+
       many_to_one :organization
 
       PURPOSE_LIST = %w[upload download workspace].freeze
@@ -25,7 +27,7 @@ module Teneo
 
         data[:organization_id] = organization.id
 
-        super data:, key:, &block
+        super data:, key: %i[organization_id name], &block
       end
     end
   end

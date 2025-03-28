@@ -4,7 +4,7 @@ Sequel.migration do
   change do
     puts "Creating table 'stage_tasks'..."
     create_table :stage_tasks do
-      primary_key :id, :uuid, default: Sequel.function(:gen_random_uuid)
+      column :id, :uuid, primary_key: true, default: Sequel.function(:gen_random_uuid)
 
       Integer :position, null: false, default: 0
 

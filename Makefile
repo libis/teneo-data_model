@@ -99,7 +99,7 @@ tool: ## Run the database tool
 tool_shell: ## Run the database tool
 	docker compose run -it --rm db_tool bash
 
-.PHONY: force
+.PHONY: FORCE
 FORCE:
 
 .PHONY: bundle_install
@@ -109,19 +109,6 @@ bundle_install: ### Install gem dependencies
 .PHONY: bundle_update
 bundle_update: ### Update gem dependencies
 	cd gem && bundle update
-
-.PHONY: all
-all: build
-
-.PHONY: build
-build:
-	docker build -t ${DOCKER_IMAGE}:$(shell git rev-parse --short HEAD) .		\
-	&& docker tag ${DOCKER_IMAGE}:$(shell git rev-parse --short HEAD) ${DOCKER_IMAGE}:latest
-
-.PHONY: push	
-push: build	
-	docker push ${DOCKER_IMAGE}:$(shell git rev-parse --short HEAD)		\	
-	&& docker push ${DOCKER_IMAGE}:latest
 
 .PHONY: clean ### Shut down the services and remove the database
 clean: down

@@ -17,3 +17,6 @@
 
 /gem/vendor/*
 /gem/bin/*
+
+/db_data/
+/db_data/*

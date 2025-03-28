@@ -7,7 +7,17 @@ module Teneo
     module WithMapping
       def self.included(base)
         base.one_to_many :mappings, class: Teneo::DataModel::Mapping do |ds|
-          ds.where(host_type: self.class.table_name, host_name: name)
+          ds.where(host_type: self.class.table_name, host_id: id)
+        end
+        base.extend(ClassMethods)
+      end
+
+      module ClassMethods
+        def from_hash(data:, key:, &block)
+          mapping = data.delete(:mapping)
+          obj = super(data: data, key: key, &block)
+          obj.load_mapping(data: mapping)
+          obj
         end
       end
 
@@ -20,7 +30,7 @@ module Teneo
       end
 
       def set_mapping(repo:, key:, value:)
-        Mapping.from_hash(data: { host_type: self.class.table_name.to_s, host_name: name, repository_name: repo, key: key, value: value })
+        Mapping.from_hash(data: { host_type: self.class.table_name.to_s, host_id: id, repository_name: repo, key: key, value: value })
       end
 
       def load_mapping(data: nil)

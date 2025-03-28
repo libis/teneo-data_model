@@ -171,18 +171,21 @@
     - tag: CSV
       name: Comma Separated Values (CSV)
       uids: x-fmt/18
-    - tag: MSXLS
-      name: Microsoft Excel Spreadsheet (XLS)
-      uids: fmt/55 fmt/56 fmt/57 fmt/175 fmt/176 fmt/177 fmt/61
-    - tag: MSXLSX
-      name: Microsoft Excel OpenXML Spreadheet (XSLX)
-      uids: fmt/214
-    - tag: MSXLSB
-      name: Microsoft Excel Non-XML Binary Workbook (XLSB)
-      uids: fmt/595
-    - tag: MSXLSM
-      name: Microsoft Excel Macro-Enabled (XLSM)
-      uids: fmt/445
+    - tag: TSV
+      name: Tab Separated Values (TSV)
+      uids: x-fmt/13
+    - tag: XLS
+      name: Microsoft Excel Spreadsheet
+      children:
+      - tag: MSXLS
+        name: Microsoft Excel Spreadsheet (XLS)
+        uids: fmt/55 fmt/56 fmt/57 fmt/175 fmt/176 fmt/177 fmt/61 fmt/445
+      - tag: MSXLSX
+        name: Microsoft Excel OpenXML Spreadheet (XSLX)
+        uids: fmt/214
+      - tag: MSXLSB
+        name: Microsoft Excel Non-XML Binary Workbook (XLSB)
+        uids: fmt/595
     - tag: OO_CALC
       name: OpenDocument Spreadsheet (ODS)
       uids: fmt/137 fmt/294 fmt/295 fmt/1755
@@ -212,6 +215,18 @@
     - tag: ZIP
       name: ZIP Archive
       uids: x-fmt/263
+    - tag: TAR
+      name: TAR Archive
+      uids: x-fmt/265
+    - tag: GZIP
+      name: GZIP Archive
+      uids: x-fmt/266
+    - tag: BZIP
+      name: BZIP Archive
+      uids: x-fmt/267
+    - tag: BZIP2
+      name: BZIP2 Archive (BZ2)
+      uids: x-fmt/268
 
 - tag: EMAIL
   name: Email formats

@@ -1,0 +1,12 @@
+{
+  "name": "public",
+  "description": "Access allowed without restrictions. No login needed.",
+  "mapping": {
+    "TeneoProduction": {
+      "code": "AR_EVERYONE"
+    },
+    "TeneoSandbox": {
+      "code": "AR_EVERYONE"
+    }
+  }
+}

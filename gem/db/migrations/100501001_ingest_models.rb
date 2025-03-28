@@ -17,8 +17,8 @@ Sequel.migration do
 
       String :identifier
 
-      foreign_key :access_right_name, :access_rights, type: String, null: false, on_delete: :restrict, on_update: :cascade
-      foreign_key :retention_policy_name, :retention_policies, type: String, null: false, on_delete: :restrict, on_update: :cascade
+      foreign_key :access_right_id, :access_rights, type: :uuid, null: false, on_delete: :restrict, on_update: :cascade
+      foreign_key :retention_policy_id, :retention_policies, type: :uuid, null: false, on_delete: :restrict, on_update: :cascade
 
       Integer :lock_version, null: false, default: 0
     end

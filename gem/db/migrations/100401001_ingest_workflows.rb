@@ -2,11 +2,9 @@
 
 Sequel.migration do
   change do
-    puts "Creating table 'stage_workflows'..."
-    create_table :stage_workflows do
-      primary_key :id, :uuid, default: Sequel.function(:gen_random_uuid)
-
-      String :stage, null: false
+    puts "Creating table 'ingest_workflows'..."
+    create_table :ingest_workflows do
+      column :id, :uuid, primary_key: true, default: Sequel.function(:gen_random_uuid)
 
       String :name, null: false, unique: true
       String :description

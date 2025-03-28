@@ -1,0 +1,81 @@
+[
+    {
+        "name": "ARCHIVE",
+        "description": "The original representation for preservation",
+        "preservation_type": "PRESERVATION_MASTER",
+        "usage_type": "VIEW",
+        "representation_code": null
+    },{
+        "name": "ARCHIVE_MM",
+        "description": "A modified representation of the original to be preserved",
+        "preservation_type": "MODIFIED_MASTER",
+        "usage_type": "VIEW",
+        "representation_code": null
+    },{
+        "name": "ARCHIVE_OCR",
+        "description": "A representation of the original with OCR applied and needs to be preserved",
+        "preservation_type": "MODIFIED_MASTER",
+        "usage_type": "VIEW",
+        "representation_code": "INDEX"
+    },{
+        "name": "THUMBNAIL",
+        "description": "A thumbnail representation for the IE",
+        "preservation_type": "DERIVATIVE_COPY",
+        "usage_type": "THUMBNAIL",
+        "representation_code": "THUMBNAIL"
+    },{
+        "name": "VIEW_MAIN",
+        "description": "A main view representation for the IE, typically the least restricted and often watermarked",
+        "preservation_type": "DERIVATIVE_COPY",
+        "usage_type": "VIEW",
+        "representation_code": "LOW"
+    },{
+        "name": "VIEW",
+        "description": "A higher quality view representation for the IE, typically more restricted and not watermarked",
+        "preservation_type": "DERIVATIVE_COPY",
+        "usage_type": "VIEW",
+        "representation_code": "HIGH"
+    },{
+        "name": "ARCHIVE_METADATA",
+        "description": "A representation with additonal files often containing metadata - to be preserved",
+        "preservation_type": "MODIFIED_MASTER",
+        "usage_type": "INDEX",
+        "representation_code": "INDEX"
+    },{
+        "name": "INDEX_STRUCTURED",
+        "description": "A representation with structured metadata - no preservation needed",
+        "preservation_type": "DERIVATIVE_COPY",
+        "usage_type": "INDEX",
+        "representation_code": "HIGH"
+    },{
+        "name": "INDEX_UNSTRUCTURED",
+        "description": "A representation with unstructured metadata - to be preserved",
+        "preservation_type": "MODIFIED_MASTER", 
+        "usage_type": "INDEX",
+        "representation_code": "LOW"
+    },{
+        "name": "VIEW_MEDIUM",
+        "description": "A medium quality view representation for the IE, typically with average restriction and not preserved",
+        "preservation_type": "DERIVATIVE_COPY",
+        "usage_type": "VIEW",
+        "representation_code": "MEDIUM"
+    },{
+        "name": "INDEX_TXT",
+        "description": "A representation with text metadata - no preservation needed",
+        "preservation_type": "DERIVATIVE_COPY",
+        "usage_type": "INDEX",
+        "representation_code": "LOW"
+    },{
+        "name": "OCR_TXT",
+        "description": "A representation with OCR text per page - no preservation needed",
+        "preservation_type": "DERIVATIVE_COPY",
+        "usage_type": "INDEX",
+        "representation_code": "OCR_TXT"
+    },{
+        "name": "OCR_TXT_FULL",
+        "description": "A representation with all OCR text in a single file - no preservation needed",
+        "preservation_type": "DERIVATIVE_COPY",
+        "usage_type": "INDEX",
+        "representation_code": "OCR_TXT_FULL"
+    }
+]
