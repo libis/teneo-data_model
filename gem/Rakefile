@@ -52,7 +52,7 @@ namespace :db do
     require 'teneo/data_model'
     db_connect do |db|
       Sequel::Seed.setup ENV.fetch('RUBY_ENV', 'development').to_sym
-      Sequel::Seeder.apply(db, './db/seeds')
+      Sequel::Seeder.apply(db, ENV.fetch('SEEDS_DIR', './db/seeds'))
     end
   end
 end

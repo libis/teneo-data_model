@@ -61,6 +61,7 @@ logf-%: ## Show the logs of a specific service
 
 .PHONY: up ## Start services
 up:
+	cd gem; make up
 	docker compose up -d
 
 .PHONY: up-%
