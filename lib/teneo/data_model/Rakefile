@@ -1,0 +1,10 @@
+# frozen_string_literal: true
+
+require 'dotenv'
+Dotenv.load('.env.local', '.env')
+
+$LOAD_PATH.unshift File.expand_path(File.join(__dir__, '..', '..'))
+require 'teneo/data_model'
+
+path = File.expand_path(__dir__)
+Dir.glob(File.join(path, 'tasks', '*.rake')).each { |file| import file }

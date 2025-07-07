@@ -1,22 +1,21 @@
-/.bundle/
-/.yardoc
-/_yardoc/
-/coverage/
-/doc/
-/pkg/
-/spec/reports/
-/tmp/
+/db/data/*/**
+!/db_data/*/.keep
 
-/.vscode/
-/.idea/
-.rake_tasks~
+/vendor/**
+!/vendor/.keep
 
-# rspec failure tracking
-.rspec_status
+/db_data/db/**/*
+!/db_data/db/.keep
+
+/db_data/admin_data/**/*
+!db_data/admin_data/.keep
+
+/db_data/admin_logs/**/*
+!/db_data/admin_logs/.keep
+
+/pkg
+/bin/*
+
 .env.local
 
-/gem/vendor/*
-/gem/bin/*
-
-/db_data/
-/db_data/*
+.rspec_status

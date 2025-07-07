@@ -1,18 +1,12 @@
-name: teneo
+name: teneo-data_model
 
 services:
   db:
     image: postgres:17-alpine
     user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
-    command: 
+    command:
       - -c
       - log_hostname=off
-      - -c
-      - ssl=on
-      - -c
-      - ssl_cert_file=/var/lib/postgresql/data/server.crt
-      - -c
-      - ssl_key_file=/var/lib/postgresql/data/server.key
     init: true
     shm_size: 128mb
     environment:
@@ -23,30 +17,26 @@ services:
     networks:
       - db_net
     ports:
-      - "${DB_PORT}:5432"
+      - "${DB_PUBLIC_PORT}:5432"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./db_data:/var/lib/postgresql/data
+      - ./db_data/db:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
       interval: 10s
       timeout: 10s
       retries: 20
       start_period: 5s
-    labels:
-      - be.libis.service=teneo
-      - be.libis.environment=production
-      - be.libis.instance=ingester
-      - be.libis.component=db
 
   db_admin:
     image: dpage/pgadmin4
+    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
     networks:
       - db_net
       - app_net
     ports:
-      - "7004:5050"
+      - "${DBADMIN_PUBLIC_PORT}:5050"
     environment:
       TZ: "Europe/Brussels"
       PGADMIN_DEFAULT_EMAIL: ${DBADMIN_USER:-admin@libis.be}
@@ -58,21 +48,15 @@ services:
       PGADMIN_LISTEN_PORT: "5050"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - db_admin_data:/var/lib/pgadmin
-      - db_admin_logs:/var/log/pgadmin
+      - ./db_data/admin_data:/var/lib/pgadmin
+      - ./db_data/admin_logs:/var/log/pgadmin
     depends_on:
       db:
         condition: service_healthy
         restart: true
     restart: unless-stopped
-    labels:
-      - be.libis.service=teneo
-      - be.libis.environment=production
-      - be.libis.instance=ingester
-      - be.libis.component=db_admin
 
-
-  db_tool:
+  gem:
     image: ${RUBY_IMAGE}:${RUBY_VERSION}
     user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
     working_dir: /app
@@ -97,56 +81,16 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - ./gem:/app
+      - .:/app
     restart: no
     profiles:
-      - db_tool
-    labels:
-      - be.libis.be.service=teneo
-      - be.libis.be.environment=production
-      - be.libis.be.instance=ingester
-      - be.libis.be.component=db_tool
+      - gem
 
-volumes:
-  db_data:
-    driver: local
-    labels:
-      - be.libis.be.service=teneo
-      - be.libis.be.environment=production
-      - be.libis.be.instance=ingester
-      - be.libis.be.component=db
-
-  db_admin_data:
-    driver: local
-    labels:
-      - be.libis.be.service=teneo
-      - be.libis.be.environment=production
-      - be.libis.be.instance=ingester
-      - be.libis.be.component=db_admin
-
-  db_admin_logs:
-    driver: local
-    labels:
-      - be.libis.be.service=teneo
-      - be.libis.be.environment=production
-      - be.libis.be.instance=ingester
-      - be.libis.be.component=db_admin
-    
 networks:
   app_net:
     driver: bridge
     attachable: true
-    labels:
-      - be.libis.be.service=teneo
-      - be.libis.be.environment=production
-      - be.libis.be.instance=ingester
-      - be.libis.be.component=app
 
   db_net:
     driver: bridge
     attachable: true
-    labels:
-      - be.libis.be.service=teneo
-      - be.libis.be.environment=production
-      - be.libis.be.instance=ingester
-      - be.libis.be.component=network
