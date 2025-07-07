@@ -2,7 +2,7 @@
 
 module Teneo
   module DataModel
-    class IngestJob < Teneo::DataModel::Base
+    class IngestAgreement < Teneo::DataModel::Base
       plugin :optimistic_locking
 
       many_to_one :organization

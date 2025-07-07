@@ -5,7 +5,7 @@ module Teneo
     class IngestJob < Teneo::DataModel::Base
       plugin :optimistic_locking
 
-      with_parameters
+      # with_parameters
 
       many_to_one :ingest_agreements
       many_to_one :ingest_workflows
