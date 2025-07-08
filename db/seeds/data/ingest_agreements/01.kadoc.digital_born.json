@@ -3,6 +3,7 @@
     "name": "KADOC Digital Born",
     "description": "KADOC Digital Born archives",
     "material_flow": "no_collections",
+    "producer": "admin1",
     "contact_ingest": [
         "Katrien Wijns",
         "Ganesh Venkatasubban"

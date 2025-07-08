@@ -17,6 +17,7 @@ Sequel.migration do
 
       foreign_key :organization_id, :organizations, type: :uuid, null: false, on_delete: :restrict, on_update: :restrict
       foreign_key :material_flow_id, :material_flows, type: :uuid, null: false, on_delete: :restrict, on_update: :restrict
+      foreign_key :producer_id, :producers, type: :uuid, null: false, on_delete: :restrict, on_update: :restrict
 
       Integer :lock_version, null: false, default: 0
 

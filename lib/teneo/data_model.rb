@@ -45,6 +45,7 @@ module Teneo
     autoload :Membership, 'teneo/data_model/membership'
     autoload :Storage, 'teneo/data_model/storage'
     autoload :MaterialFlow, 'teneo/data_model/material_flow'
+    autoload :Producer, 'teneo/data_model/producer'
     autoload :IngestAgreement, 'teneo/data_model/ingest_agreement'
     autoload :IngestWorkflow, 'teneo/data_model/ingest_workflow'
     autoload :StageWorkflow, 'teneo/data_model/stage_workflow'

@@ -12,6 +12,14 @@
     - name: 'sftp'
       location: '/nas/vol03/sftp_upload/kadoc'
       purpose: 'upload'
+  producers:
+    - agent: admin1
+      password: 'admin123'
+      mapping:
+        TeneoSandbox:
+          code: '00000001'
+        TeneoProduction:
+          code: '00000002'
   material_flows:
     - name: no_collections
       description: 'Default material flow'

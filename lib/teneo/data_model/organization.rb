@@ -51,6 +51,7 @@ module Teneo
       def self.from_hash(data:, key: nil, &block)
         storages = data.delete(:storages)
         material_flows = data.delete(:material_flows)
+        producers = data.delete(:producers)
         org = super(data:, key:, &block)
         storages&.each do |storage|
           storage[:org_name] = org.name
@@ -59,6 +60,10 @@ module Teneo
         material_flows&.each do |material_flow|
           material_flow[:org_name] = org.name
           Teneo::DataModel::MaterialFlow.from_hash(data: material_flow)
+        end
+        producers&.each do |producer|
+          producer[:org_name] = org.name
+          Teneo::DataModel::Producer.from_hash(data: producer)
         end
       end
     end

@@ -7,6 +7,12 @@
     - name: 'uploader'
       location: '/nas/vol04/uploader/data/libis'
       purpose: 'upload'
+  producers:
+    - agent: 'admin1'
+      password: 'admin123'
+      mapping:
+        TeneoSandbox:
+          code: '00000001'
   material_flows:
     - name: 'default'
       description: 'Default material flow'
@@ -33,6 +39,14 @@
     - name: 'uploader'
       location: '/nas/vol04/uploader/data/libis'
       purpose: 'upload'
+  producers:
+    - agent: 'admin1'
+      password: 'admin123'
+      mapping:
+        TeneoSandbox:
+          code: '00000001'
+        TeneoProduction:
+          code: '00000002'
   material_flows:
     - name: default
       description: 'Material flow without collections'

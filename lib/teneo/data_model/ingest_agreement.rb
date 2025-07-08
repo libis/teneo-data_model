@@ -7,6 +7,7 @@ module Teneo
 
       many_to_one :organization
       many_to_one :material_flow
+      many_to_one :producer
 
       one_to_many :ingest_jobs
 
@@ -31,6 +32,14 @@ module Teneo
         raise "Material flow '#{material_flow_name}' not found" if material_flow.nil?
 
         data[:material_flow_id] = material_flow.id
+
+        producer_agent = data.delete(:producer)
+        raise 'No producer to load' if producer_agent.nil?
+
+        producer = Teneo::DataModel::Producer.dataset[organization_id: organization.id, agent: producer_agent]
+        raise "Producer '#{producer_agent}' not found" if producer.nil?
+
+        data[:producer_id] = producer.id
 
         super
       end
