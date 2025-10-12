@@ -16,7 +16,7 @@ gem 'rake', '~> 13.0', '>= 13.2.1'
 gem 'rspec', '~> 3.0', '>= 3.13.0'
 
 gem 'awesome_print'
-gem 'faraday-retry'
+gem 'faraday-retry', '>= 2.3.2'
 
 # Gem publishing and changelog
 gem 'gem-release'
