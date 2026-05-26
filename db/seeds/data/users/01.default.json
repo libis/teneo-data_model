@@ -1,0 +1,39 @@
+[
+  {
+    "email": "admin@libis.be",
+    "first_name": "Libis",
+    "last_name": "Administrator",
+
+    "password": "abc123",
+
+    "roles": {
+      "demo": [
+        "admin"
+      ],
+      "test": [
+        "admin"
+      ],
+      "kuleuven": [
+        "admin"
+      ],
+      "kadoc": [
+        "admin"
+      ],
+      "ua": [
+        "admin"
+      ],
+      "alamire": [      
+        "admin"
+      ],
+      "cag": [
+        "admin"
+      ],
+      "vlp": [
+        "admin"
+      ],
+      "crkc": [
+        "admin"
+      ]
+    }
+  }
+]

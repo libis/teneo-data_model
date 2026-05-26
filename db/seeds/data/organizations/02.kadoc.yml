@@ -1,0 +1,35 @@
+- name: 'kadoc'
+  description: 'KADOC'
+  mapping:
+    TeneoSandbox:
+      code: 'KADOC'
+    TeneoProduction:
+      code: 'KADOC'
+  storages:
+    - name: 'uploader'
+      location: '/nas/vol04/uploader/data/kadoc'
+      purpose: 'upload'
+    - name: 'sftp'
+      location: '/nas/vol03/sftp_upload/kadoc'
+      purpose: 'upload'
+  material_flows:
+    - name: no_collections
+      description: 'Default material flow'
+      ingest_type: METS
+      mapping:
+        TeneoProduction:
+          code: '227712995'
+          ingest_dir: '/nas/vol04/ingester-deposit/prod/kadoc'
+        TeneoSandbox:
+          code: '23842406'
+          ingest_dir: '/nas/vol04/ingester-deposit/test/kadoc'
+    - name: dc_collections
+      description: 'Material flow with collections via Dublin Core metadata'
+      ingest_type: METS
+      mapping:
+        TeneoProduction:
+          code: '475806825'
+          ingest_dir: '/nas/vol04/ingester-deposit/prod/kadoc'
+        TeneoSandbox:
+          code: '23842406'
+          ingest_dir: '/nas/vol04/ingester-deposit/test/kadoc'

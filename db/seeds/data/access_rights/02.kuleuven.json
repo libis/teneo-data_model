@@ -1,0 +1,36 @@
+[
+  {
+    "name":"private",
+    "description":"Access allowed from within the KU Leuven or for registered users.",
+    "mapping":{
+      "TeneoProduction":{
+        "code":"AR_IP_RANGE_REGISTERED"
+      },
+      "TeneoSandbox":{
+        "code":"AR_IP_RANGE_REGISTERED"
+      }
+    }
+  },{
+    "name":"restricted",
+    "description":"Access allowed from within the KU Leuven IP range.",
+    "mapping":{
+      "TeneoProduction":{
+        "code":"AR_IP_RANGE"
+      },
+      "TeneoSandbox":{
+        "code":"AR_IP_RANGE"
+      }
+    }
+  },{
+    "name":"KUL_IP_range",
+    "description":"Only accessible from devices with an IP Address in the KU Leuven association IP range",
+    "mapping":{
+      "TeneoProduction":{
+        "code":"118683"
+      },
+      "TeneoSandbox":{
+        "code":"50740"
+      }
+    }
+  }
+]

@@ -1,9 +1,18 @@
 # inherit_from: .rubocop_todo.yml
 
+AllCops:
+  NewCops: enable
+
 Style/Documentation:
   Enabled: false
 
 Lint/RescueException:
+  Enabled: false
+
+Lint/SuppressedException:
+  Enabled: false
+
+Naming/MemoizedInstanceVariableName:
   Enabled: false
 
 Metrics/AbcSize:
@@ -25,4 +34,4 @@ Metrics/PerceivedComplexity:
   Max: 37
 
 Layout/LineLength:
-  Max: 140
+  Max: 180

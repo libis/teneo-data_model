@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
-module Teneo::DataModel
-  class RetentionPolicy < Teneo::DataModel::Base
+module Teneo
+  module DataModel
+    class RetentionPolicy < Teneo::DataModel::Base
+      include Teneo::DataModel::WithMapping
 
-    def validate
-      super
-      validates_presence [:name, :ext_id]
+      def code(repository:)
+        get_mapping(repo: repository, key: :code)
+      end
     end
   end
 end

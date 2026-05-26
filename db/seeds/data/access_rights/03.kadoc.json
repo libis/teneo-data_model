@@ -1,0 +1,41 @@
+[
+  {
+    "name": "KADOC admin",
+    "description": "Access allowed only for members of the kadocadmin group.",
+    "mapping": {
+      "TeneoProduction": {
+        "code": "1020"
+      },
+      "TeneoSandbox": {
+        "code": "1247"
+      }
+    }
+  },{
+    "name": "KADOC guest",
+    "description": "Access allowed for kadocadmin and kadocguest group members.",
+    "mapping": {
+      "TeneoProduction": {
+        "code": "1021"
+      },
+      "TeneoSandbox": {
+        "code": "1248"
+      }
+    }
+  },{
+    "name": "KADOC capronnier",
+    "description": "Access allowed for kadocadmin and kadocguest group members as wel as capronnier user.", 
+    "mapping": {
+      "TeneoProduction": {
+        "code": "89293"
+      }
+    }
+  },{
+    "name": "KADOC boerenbond",
+    "description": "Access allowed for kadocadmin and boerenbond group members.",
+    "mapping": {
+      "TeneoProduction": {
+        "code": "2008555"
+      }
+    }
+  }
+]

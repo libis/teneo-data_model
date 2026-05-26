@@ -1,0 +1,12 @@
+{
+  "name": "NoRetentionPolicy",
+  "description": "No retention policy applied.",
+  "mapping": {
+    "TeneoProduction": {
+      "code": "NO_RETENTION"
+    },
+    "TeneoSandbox": {
+      "code": "NO_RETENTION"
+    }
+  }
+}

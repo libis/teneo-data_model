@@ -1,0 +1,23 @@
+{
+    "name": "archive_digitalborn_unstructured",
+    "description": "Ingest workflow for archives with unstructured digital born content",
+    "ingest_stages": {
+        "validation": "kadoc_digitalborn_validation",
+        "preprocess": "kadoc_digitalborn_preprocess",
+        "preingest": "kadoc_digitalborn_preingest",
+        "ingest": "kadoc_digitalborn_ingest",
+        "postingest": "kadoc_digitalborn_postingest"
+    },
+    "parameters": {
+        "location": {
+            "type": "string",
+            "description": "Location of the uploaded digital born content",
+            "value": "/nas/upload/kadoc/digitalborn",
+            "overrides": [
+                "validation#location",
+                "preprocess#location"
+            ]
+
+        }
+    }
+}

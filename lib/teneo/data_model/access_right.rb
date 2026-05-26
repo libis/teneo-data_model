@@ -2,12 +2,14 @@
 
 require_relative 'base'
 
-module Teneo::DataModel
-  class AccessRight < Teneo::DataModel::Base
+module Teneo
+  module DataModel
+    class AccessRight < Teneo::DataModel::Base
+      include Teneo::DataModel::WithMapping
 
-    def validate
-      super
-      validates_presence [:name, :ext_id]
+      def code(repository:)
+        get_mapping(repo: repository, key: :code)
+      end
     end
   end
 end
